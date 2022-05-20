@@ -108,6 +108,11 @@ public class FreeFlyCamera : MonoBehaviour
     {
         _initPosition = transform.position;
         _initRotation = transform.eulerAngles;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        Cursor.lockState = CursorLockMode.Locked;
+        _showCursor = false;
+        ////////////////////////////////////////////////////////////////////////////////////
     }
 
     private void OnEnable()
@@ -244,7 +249,7 @@ public class FreeFlyCamera : MonoBehaviour
     private IEnumerator WaitTab()
     {
         _tempTabActive = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.4f);
         _tempTabActive = false;
     }
     ////////////////////////////////////////////////////////////////////////////////////
