@@ -28,7 +28,7 @@ public class VectorTransform : MonoBehaviour
     public Material selectedPointMaterial;
 
     // Vector of the game object's position
-    private Vector3 vectorDirection;
+    private Vector3 _vectorDirection;
 
     private int selectedID = -1;
 
@@ -51,6 +51,7 @@ public class VectorTransform : MonoBehaviour
     // Select a part of the object and outline it
     public void Select(GameObject objectSelected)
     {
+        Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
             showPoints(false);
@@ -149,13 +150,13 @@ public class VectorTransform : MonoBehaviour
         arrowHead.transform.position = P2.transform.position;
 
         // Set ROTATION 
-        vectorDirection = new Vector3(
+        _vectorDirection = new Vector3(
             (positionP2.x - positionP1.x),
             (positionP2.y - positionP1.y),
             (positionP2.z - positionP1.z)
             );
 
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, vectorDirection);   
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, _vectorDirection);   
         transform.rotation = rotation;
 
         // Set SCALE 
@@ -186,6 +187,8 @@ public class VectorTransform : MonoBehaviour
 
     private void showSelectedPoint(GameObject pointToSelect)
     {
+        Debug.Log("SHOW SELECTED POINT");
+
         foreach (GameObject currentPoint in _movablePoints)
         {
             if (pointToSelect != null && currentPoint.name == pointToSelect.name)
@@ -210,4 +213,18 @@ public class VectorTransform : MonoBehaviour
         if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
             Select(null);
     }
+
+    // Return the direction of the vector
+    public Vector3 getVectorDirection()
+    {
+        return _vectorDirection;
+    }
+
+    // Return the position of the first point
+    public Vector3 getPositionP1()
+    {
+        return positionP1;
+    }
+
+
 }

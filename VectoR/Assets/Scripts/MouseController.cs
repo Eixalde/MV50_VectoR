@@ -52,11 +52,14 @@ public class MouseController : MonoBehaviour
             // Select a 3DVector object
             if (_mainObject.GetComponent<VectorTransform>() != null)
             {
+                Debug.Log("CALL FUNCTION SELECT POINT");
+                Debug.Log("Object selected : " + gameObject.transform.parent.gameObject.name);
+
                 _mainObject.GetComponent<VectorTransform>().Select(gameObject);
 
                 if (selectionManager != null)
                 {
-                    if (_mainObject.transform.parent != null)
+                    if (_mainObject.transform.parent.gameObject.name == "3DVector")
                         selectionManager.GetComponent<ObjectSelect>().select(_mainObject.transform.parent.gameObject);
                     else
                         selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
