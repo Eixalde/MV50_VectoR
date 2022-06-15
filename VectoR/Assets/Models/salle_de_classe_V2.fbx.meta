@@ -1,0 +1,307 @@
+fileFormatVersion: 2
+guid: 7a182f018b66b2b4a8f7a78919a127dd
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bois.001
+    second: {fileID: 2100000, guid: 64e9cdf03fb92c94da96da83344d4572, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: c51b479be4272b54ca5b53e90d629526, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: acier evier
+    second: {fileID: 2100000, guid: d34b99f5c1b56284ea1fff49a1f5e169, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ardoise
+    second: {fileID: 2100000, guid: f96f3bac4ea88244599d7ecabf1d5a0f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ardoise.001
+    second: {fileID: 2100000, guid: 966f540158c66974d83dba48229aa498, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: etiquette noire
+    second: {fileID: 2100000, guid: 3cff5f104c1fafd4099bf78f045d1a13, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: feuilles
+    second: {fileID: 2100000, guid: e280e444193247e40810ad2767bd888e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy blanc
+    second: {fileID: 2100000, guid: 91c7330730492d14bbfe26fdabc140eb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy blanc.001
+    second: {fileID: 2100000, guid: ebb556f7dc2ec6e4a88f80bf673f79b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy blanc.002
+    second: {fileID: 2100000, guid: 08da15851e42f1545b3a8409adf20cf3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy blanc.003
+    second: {fileID: 2100000, guid: b66fad822cf34854c89c12a11c484be5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton bleu
+    second: {fileID: 2100000, guid: b38f7ede6e9b4d8468ec8ddfa6561c94, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton bleu.001
+    second: {fileID: 2100000, guid: 647c9f19837b9a64598417601b1138a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton rouge
+    second: {fileID: 2100000, guid: fb26c107b6554ac449de129fa896436b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton rouge.001
+    second: {fileID: 2100000, guid: 26770ea1193ca3444aa366415f4355b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton vert
+    second: {fileID: 2100000, guid: 6b5018563425f324aba3dc4e9232b14c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy bouton vert.001
+    second: {fileID: 2100000, guid: 14609c2a8a4e80f49bde098c621cd437, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy noir
+    second: {fileID: 2100000, guid: cc6960d216164a94c829ce98ce50279c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy noir.001
+    second: {fileID: 2100000, guid: efb0ae44bf78307489ab2f06fdf48c57, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glossy noir.002
+    second: {fileID: 2100000, guid: a38ef7f13eae3d644ae9ad6387f0398a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: livrebleu
+    second: {fileID: 2100000, guid: e514d168423e7ed41ad6208a9280de60, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: livrebrun
+    second: {fileID: 2100000, guid: bf5e364dce9fb7741bef87d880d12f82, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: livrerouge
+    second: {fileID: 2100000, guid: 6a6aaf9d3ba3d9742af1bbe80b06ebf2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: livrevert
+    second: {fileID: 2100000, guid: 66ecedb2ab12605489a9f3a5305b2bd9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: livreviolet
+    second: {fileID: 2100000, guid: aabbe04bc79f129468b337b433541cac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal disquette
+    second: {fileID: 2100000, guid: 4ecc5a4eb003f7b41af82d8365ba07d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: noir plug
+    second: {fileID: 2100000, guid: d0b2875a1aa8a68478413c6a245f64af, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: noir txt
+    second: {fileID: 2100000, guid: 49752034395454e4bb0ea7a596a1aad4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: noir txt.001
+    second: {fileID: 2100000, guid: d484607e33d95404fac0cb9d07a21027, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pages
+    second: {fileID: 2100000, guid: 92bc6cc42d19b824bad51137f95a8172, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plaque metal
+    second: {fileID: 2100000, guid: 096d641d01264e94ea8dbbdbc317fc96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pot
+    second: {fileID: 2100000, guid: 156e2c730828d2f4bbcba17de98f33d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stylo bleu
+    second: {fileID: 2100000, guid: dc7bce519f76522458145ed943ac02a1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stylo rouge
+    second: {fileID: 2100000, guid: c33680fa02923e24fb9435c8f78249ac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stylo vert
+    second: {fileID: 2100000, guid: 5e53bb05f7240274781a3b2bcb290452, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: terre
+    second: {fileID: 2100000, guid: 8ec0e9fda70c1ea42bbee1c2c0b19000, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tige
+    second: {fileID: 2100000, guid: 6e89069202894a84e92b06c09b411c82, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tuyau
+    second: {fileID: 2100000, guid: 4c4a12bb7c6d8454ba8c7510eb0692ff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tuyau.001
+    second: {fileID: 2100000, guid: dec2cb3eb3ec4f042bfddb42df8c7082, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vis metal
+    second: {fileID: 2100000, guid: c3565c8a2c82ca54c8200e5e569e09e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vitre
+    second: {fileID: 2100000, guid: 58cd7f18a18bce947be8a86064e1bd14, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
