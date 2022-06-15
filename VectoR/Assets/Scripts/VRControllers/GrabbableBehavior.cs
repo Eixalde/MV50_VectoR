@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public enum GrabType { None, Free, Snap };
 
@@ -15,6 +17,8 @@ public class GrabbableBehavior : MonoBehaviour
     public TextMesh positions;
 
     public GameObject _coordSystem = null;
+    public InputActionAsset inputActions;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +37,18 @@ public class GrabbableBehavior : MonoBehaviour
             OnGrab();
         }
     }
+ 
+    public void JustSelected()
+    {
+        InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
+        if (Abutton.IsPressed())
+        {
+            OnSelected();
+            Debug.Log("CLIQUE SUR A");
+            printPositions();
+        }
+    }
+
     public void isHeldChange()
     {
         isHeld = !isHeld;
