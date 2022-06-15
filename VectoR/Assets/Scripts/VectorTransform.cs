@@ -51,7 +51,6 @@ public class VectorTransform : MonoBehaviour
     // Select a part of the object and outline it
     public void Select(GameObject objectSelected)
     {
-        Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
             showPoints(false);
