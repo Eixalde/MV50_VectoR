@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class PointTool : MonoBehaviour
 {
@@ -10,25 +12,34 @@ public class PointTool : MonoBehaviour
     private bool placingPoint = false;
 
     // Temporary coordinate system
-    private GameObject tempCoordinateSystem;
+    public GameObject tempCoordinateSystem;
     // Temporary point position
     private Vector3 tempPosition;
+
+    public InputActionAsset inputActions;
+
+    private APressedDelay aPressed;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        aPressed = GetComponent<APressedDelay>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(placingPoint)
+        InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
+        Debug.Log("Placing point : " + placingPoint  + "A pressed : " + aPressed.debugIsAPressed());
+        if (placingPoint)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (aPressed.isApressed())
             {
                 // Converting mouse position to 3D coordinates
-                tempPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                tempPosition = GameObject.Find("RightHand Controller").transform.position;
+                
                 placingPoint = false;
                 createPoint(tempCoordinateSystem, tempPosition);
 
@@ -42,9 +53,13 @@ public class PointTool : MonoBehaviour
         Transform transform = new GameObject().transform;
         GameObject point = Instantiate(_3DPoint, transform.position, transform.rotation);
         // Commented for debug purpose
-        // PointTransform pt = _3DPoint.GetComponent<PointTransform>();
-        // pt.CoordinateSystem = coordinateSystem;
-        // pt.position = position;
+        PointTransform pt = _3DPoint.GetComponent<PointTransform>();
+        if (pt)
+        {
+            pt.coordinateSystem = coordinateSystem;
+            pt.position = position;
+        }
+        
     }
 
     // Create a point withour coordinates
@@ -52,6 +67,11 @@ public class PointTool : MonoBehaviour
     {
         tempCoordinateSystem = coordinateSystem;
         placingPoint = true;
+    }
+
+    public void pointTool()
+    {
+        createPointFromNothing(tempCoordinateSystem);
     }
 }
 

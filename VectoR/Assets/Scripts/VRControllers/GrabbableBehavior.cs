@@ -13,6 +13,8 @@ public class GrabbableBehavior : MonoBehaviour
     private GameObject grabber;
     private bool wasKinematic;
     private bool isHeld = false;
+    private bool hover;
+
     public GrabType grabType = GrabType.Free;
     public TextMesh positions;
 
@@ -30,25 +32,148 @@ public class GrabbableBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("hover" + hover);
+        // Using tools
+        GameObject selectionManager = GameObject.Find("SelectionManager");
+        GameObject toolManager = GameObject.Find("ToolManager");
+        ObjectSelect os = selectionManager?.GetComponent<ObjectSelect>();
+        
+        if (toolManager)
+        {
+
+            VectorTool vt = toolManager.GetComponent<VectorTool>();
+            Debug.Log("tool manager + ceat vect ? : " + vt.isCreatingVector());
+            ProductTools pts = toolManager.GetComponent<ProductTools>();
+            PlanTool pt = toolManager.GetComponent<PlanTool>();
+            // Vector Tool
+
+            if (vt.isCreatingVector())
+            {
+                Debug.Log("try creat vect");
+                GameObject selectedPoint = vt.getSelectedPoint();
+                if (_mainObject.GetComponent<PointTransform>() != null && selectedPoint != null && gameObject != selectedPoint)
+                {
+                    Debug.Log("try creat vect");
+
+                    PointTransform pt1 = selectedPoint.GetComponent<PointTransform>();
+                    if(hover)
+                    {
+                        if (os)
+                        {
+                            PointTransform pt2 = os.getSelectedObject().GetComponent<PointTransform>();
+                            if (pt1 != null && pt2 != null)
+                            {
+                                vt.createVectorFrom2points(pt1.coordinateSystem, pt1.position, pt2.position);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        vt.createFromNothing(vt.tempCoorDystem);
+                    }
+                }
+            }
+            // Dot Product
+            else if (pts.isUsingDot())
+            {
+                Debug.Log("try dot");
+                GameObject selectedVector = pts.getSelectedVector();
+                if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
+                {
+                    VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                    if (hover)
+                    {
+                        // NORMALEMENT c'est changé
+                        VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            pts.OnScalarProductTrigger(vt1.gameObject, vt2.gameObject);
+                        }
+                    }
+                    
+                }
+            }
+            else if (pts.isUsingCross())
+            {
+                Debug.Log("try cross");
+                GameObject selectedVector = pts.getSelectedVector();
+                if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
+                {
+                    VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                    if(hover)
+                    {
+                        // A CHANGER POUR VR
+                        VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            pts.OnVectorProductTrigger(vt1.gameObject, vt2.gameObject);
+                        }
+                    }
+
+                }
+            }
+            else if (pt.isCreatingPlane())
+            {
+                Debug.Log("1");
+                GameObject selectedVector = pt.getSelectedVector();
+                if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && _mainObject.GetComponent<VectorTransform>()?.gameObject != selectedVector)
+                {
+                    Debug.Log("2");
+                    VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                    if (hover)
+                    {
+                        // A CHANGER POUR VR
+                        VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            Debug.Log("3");
+                            pt.createPlanWithTwoVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.CoordinateSystem);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    Debug.Log("4");
+                    pt.createPlanWith3DVector(selectedVector);
+                }
+            }
+
+        }
+
         if (isHeld)
         {
             printPositions();
             OnGrab();
         }
+
+
+
+
     }
  
     public void JustSelected()
     {
-        Debug.Log("Name : "+gameObject.name);
+        
+        //Debug.Log("Name : "+gameObject.name);
         //Debug.Log("Appuie sur A");
         InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
 
         if (Abutton.IsPressed())
         {
-            Debug.Log("Name : " + gameObject.name);
+            hover = true;
+            //Debug.Log("Name : " + gameObject.name);
             OnSelected();
             printPositions();
         }
+    }
+
+    public void HoverExited()
+    {
+        hover = false;
     }
 
     public void isHeldChange()
