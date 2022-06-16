@@ -30,9 +30,8 @@ public class GrabbableBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isHeld)
+        if (isHeld)
         {
-            Debug.Log("isHeld");
             printPositions();
             OnGrab();
         }
@@ -40,11 +39,14 @@ public class GrabbableBehavior : MonoBehaviour
  
     public void JustSelected()
     {
+        Debug.Log("Name : "+gameObject.name);
+        //Debug.Log("Appuie sur A");
         InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
+
         if (Abutton.IsPressed())
         {
+            Debug.Log("Name : " + gameObject.name);
             OnSelected();
-            Debug.Log("CLIQUE SUR A");
             printPositions();
         }
     }
@@ -57,7 +59,6 @@ public class GrabbableBehavior : MonoBehaviour
     }
     private void printPositions()
     {
-        Debug.Log("PRINT POSITION");
         Vector3 relativePosition = transform.position;
         if (_coordSystem != null)
             relativePosition -= _coordSystem.transform.position;
@@ -99,53 +100,89 @@ public class GrabbableBehavior : MonoBehaviour
 
     public void OnSelected()
     {
-
-        // SELECT OBJECT
-        GameObject selectionManager = GameObject.Find("SelectionManager");
-        // Select a 3DVector object
-        if (_mainObject.GetComponent<VectorTransform>() != null)
-        {
-            //Debug.Log("Object selected : " + transform.parent.gameObject.name);
-
-            _mainObject.GetComponent<VectorTransform>().Select(gameObject);
-
-            if (selectionManager != null)
+            // Mouse clicked detection
+            GameObject selectionManager = GameObject.Find("SelectionManager");
+            Debug.Log("main pbject : " + _mainObject);
+            if (_mainObject.GetComponent<PointTransform>())
             {
-                //if (_mainObject.transform.parent.gameObject.name == "3DVector")
-                //    selectionManager.GetComponent<ObjectSelect>().select(_mainObject.transform.parent.gameObject);
-                //else
+                _mainObject.GetComponent<PointTransform>().Select(true);
+                if (selectionManager)
+                {
                     selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
             }
-        }
-        // Select a CoordinateSystem object
-        else if (_mainObject.GetComponent<CoordinateSystemTransform>() != null)
-        {
-            _mainObject.GetComponent<CoordinateSystemTransform>().Select(true);
-            if (selectionManager != null)
+
+            // Select a 3DVector object
+            if (_mainObject.GetComponent<VectorTransform>() != null)
             {
-                selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                //Debug.Log("CALL FUNCTION SELECT POINT");
+                Debug.Log("Object selected : " + gameObject.transform.parent?.gameObject.name);
+
+                _mainObject.GetComponent<VectorTransform>().Select(gameObject);
+
+                if (selectionManager != null)
+                {
+                    if (_mainObject.transform.parent?.gameObject.GetComponent<VectorTransform>() != null)
+                    {
+                        selectionManager.GetComponent<ObjectSelect>().select(_mainObject.transform.parent.gameObject);
+                    }
+                    else
+                        selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
             }
-        }
+            // Select a CoordinateSystem object
+            else if (_mainObject.GetComponent<CoordinateSystemTransform>())
+            {
+                _mainObject.GetComponent<CoordinateSystemTransform>().Select(true);
+                if (selectionManager)
+                {
+                    selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
+            }
+            // Select a Plan object
+            else if (_mainObject.GetComponent<PlanTransform>())
+            {
+                _mainObject.GetComponent<PlanTransform>().Select(true);
+
+                if (selectionManager)
+                {
+                    selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
+            }
 
     }
 
+
     public void OnGrab()
     {
-        // MOVE OBJECT
+        //Debug.Log(" CURRENT GRAB OBJECT : " + gameObject.name + "\n OBJECT TRANSFORM: " + gameObject.transform.position);
+        Vector3 position = GameObject.Find("RightHand Controller").transform.position;
+
         // Set position of a 3DVector object
-        if (_mainObject.GetComponent<VectorTransform>() != null)
+        if (_mainObject.GetComponent<PointTransform>())
         {
-            _mainObject.GetComponent<VectorTransform>().setPosition(transform.position, gameObject.name);
+            _mainObject.GetComponent<PointTransform>().setPosition(position);
+        }
+        else if (_mainObject.GetComponent<VectorTransform>() != null)
+        {
+            
+            _mainObject.GetComponent<VectorTransform>().setPosition(position, gameObject.name);
         }
         // Set position of a CoordinateSystem object
         else if (_mainObject.GetComponent<CoordinateSystemTransform>() != null)
         {
-            _mainObject.GetComponent<CoordinateSystemTransform>().setPosition(transform.position);
+            _mainObject.GetComponent<CoordinateSystemTransform>().setPosition(position);
+        }
+        // Set position of a Plan object
+        else if (_mainObject.GetComponent<PlanTransform>())
+        {
+            _mainObject.GetComponent<PlanTransform>()._vector3D.GetComponent<VectorTransform>().setPosition(position, gameObject.name);
         }
         else
         {
-            transform.position = transform.position;
+            transform.position = position;
         }
+        
 
     }
 }

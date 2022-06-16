@@ -45,12 +45,14 @@ public class VectorTransform : MonoBehaviour
         {
             CheckSelection();
             setTransformFromPoints();
+            //Debug.Log("Vector P1 pos : " + positionP1);
         }
     }
 
     // Select a part of the object and outline it
     public void Select(GameObject objectSelected)
     {
+        //Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
             showPoints(false);
@@ -106,6 +108,7 @@ public class VectorTransform : MonoBehaviour
         }
         else if (selectedID == 1 && name == "P2")
         {
+            if (positionP2 != newPosition - CoordinateSystem.transform.position)
             positionP2 = newPosition - CoordinateSystem.transform.position;
         }
         else if (selectedID == 3 && (name == "VectorAxis" || name == "PM"))
@@ -155,12 +158,12 @@ public class VectorTransform : MonoBehaviour
             (positionP2.z - positionP1.z)
             );
 
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, _vectorDirection);   
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, _vectorDirection);
         transform.rotation = rotation;
 
         // Set SCALE 
         // Distance between the points P1 and P2
-        float distance = Mathf.Sqrt(        
+        float distance = Mathf.Sqrt(
           Mathf.Pow(positionP2.x - positionP1.x, 2)
           + Mathf.Pow(positionP2.y - positionP1.y, 2)
           + Mathf.Pow(positionP2.z - positionP1.z, 2)
@@ -168,7 +171,7 @@ public class VectorTransform : MonoBehaviour
         // Set the length of the axis
         axis.transform.localScale = new Vector3(
             axis.transform.localScale.x,
-            distance/2,
+            distance / 2,
             axis.transform.localScale.z
             );
 
@@ -186,7 +189,6 @@ public class VectorTransform : MonoBehaviour
 
     private void showSelectedPoint(GameObject pointToSelect)
     {
-        Debug.Log("SHOW SELECTED POINT");
 
         foreach (GameObject currentPoint in _movablePoints)
         {
@@ -223,6 +225,11 @@ public class VectorTransform : MonoBehaviour
     public Vector3 getPositionP1()
     {
         return positionP1;
+    }
+
+    public Vector3 getVector()
+    {
+        return positionP2 - positionP1;
     }
 
 

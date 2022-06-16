@@ -24,7 +24,28 @@ public class PlanTransform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckSelection();
         setTransformFromVector();
+    }
+
+    public void Select(bool select)
+    {
+        _vector3D.SetActive(select);
+        GetComponent<Outline>().enabled = select;
+    }
+
+    private void CheckSelection()
+    {
+        GameObject selectionManager = GameObject.Find("SelectionManager");
+        if (selectionManager == null)
+            return;
+
+        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != _vector3D.name && selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
+        {
+            Select(false);
+            _vector3D.SetActive(false);
+        }
+
     }
 
     private Vector3 getOffset()
@@ -53,11 +74,22 @@ public class PlanTransform : MonoBehaviour
 
     private void setTransformFromVector()
     {
-        
+
         // SET POSITION
-        Vector3 positionVect = _vector3D.GetComponent<VectorTransform>().getPositionP1();
-        transform.position = positionVect;
-        _plan.transform.localPosition = -getOffset();
+        VectorTransform vt = _vector3D.GetComponent<VectorTransform>();
+        if (vt)
+        {
+            Vector3 positionVect = vt.getPositionP1();
+            Vector3 pos = positionVect;
+            GameObject coordinateSystem = vt.CoordinateSystem;
+
+            if (coordinateSystem != null)
+            {
+                pos += coordinateSystem.transform.position;
+            }
+            transform.position = pos;
+
+        }
 
         // SET ORIENTATION
         Vector3 directionVect = _vector3D.GetComponent<VectorTransform>().getVectorDirection();

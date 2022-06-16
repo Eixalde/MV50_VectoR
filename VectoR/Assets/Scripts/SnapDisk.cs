@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class SnapDisk : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class SnapDisk : MonoBehaviour
 
     private GameObject previous;
     private Vector3 prevCoord;
+
+    public Animator sceneTransitionAnim;
 
 
     private void Update()
@@ -29,6 +33,13 @@ public class SnapDisk : MonoBehaviour
             GetComponent<BoxCollider>().enabled = false;
             collision.gameObject.transform.position = spot.transform.position;
             collision.gameObject.transform.rotation = spot.transform.rotation;
+            StartCoroutine(loadSceneTransition());
         }
+    }
+
+    private IEnumerator loadSceneTransition()
+    {
+        yield return new WaitForSeconds(0);
+        SceneManager.LoadScene("SampleScene");
     }
 }
