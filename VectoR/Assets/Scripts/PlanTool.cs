@@ -16,7 +16,10 @@ public class PlanTool : MonoBehaviour
     private Vector3 tempP2;
 
     // Temporary Coordinate System
-    private GameObject tempCoordinateSystem;
+    public GameObject tempCoordinateSystem;
+
+    private GameObject selectedVector;
+    private bool creatingPlane;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +62,7 @@ public class PlanTool : MonoBehaviour
     {
         placingP1 = true;
         tempCoordinateSystem = coordinate;
+        creatingPlane = false;
     }
 
     /*
@@ -72,8 +76,14 @@ public class PlanTool : MonoBehaviour
         PlanTransform pt = plan.GetComponent<PlanTransform>();
         if(pt)
         {
-            pt._vector3D = _3Dvector;
+            pt._vector3D.GetComponent<VectorTransform>().positionP1 = _3Dvector.GetComponent<VectorTransform>().positionP1;
+            pt._vector3D.GetComponent<VectorTransform>().positionP2 = _3Dvector.GetComponent<VectorTransform>().positionP2;
+            pt._vector3D.GetComponent<VectorTransform>().CoordinateSystem = _3Dvector.GetComponent<VectorTransform>().CoordinateSystem;
+            pt._vector3D.SetActive(true);
+           
         }
+        
+        creatingPlane = false;
     }
 
     /* 
@@ -94,7 +104,9 @@ public class PlanTool : MonoBehaviour
                 vt.positionP2 = point + vector;
                 vt.CoordinateSystem = coordinateSystem;
             }
-        }     
+            pt._vector3D.SetActive(true);
+        }
+        creatingPlane = false;
     }
     /*
      * Create a plan using two non colinear vectors, a Point and a Coordonate System
@@ -104,5 +116,36 @@ public class PlanTool : MonoBehaviour
         //Debug.Log("creating 2 vector plan");
         Vector3 vector = Vector3.Cross(vector1, vector2);
         createPlanWithVector(vector, point, coordinateSystem);
+        creatingPlane = false;
+    }
+
+    public void planTool()
+    {
+        GameObject selectionManager = GameObject.Find("SelectionManager");
+        if (selectionManager)
+        {
+            GameObject selectedObject = selectionManager.GetComponent<ObjectSelect>()?.getSelectedObject();
+            Debug.Log("selected : " + selectedObject);
+            VectorTransform vt = selectedObject.GetComponent<VectorTransform>();
+            if (vt)
+            {
+                selectedVector = selectedObject;
+                creatingPlane = true;
+            }
+            else
+            {
+                createPlanFromNothing(tempCoordinateSystem);
+            }
+        }
+    }
+
+    public GameObject getSelectedVector()
+    {
+        return selectedVector;
+    }
+
+    public bool isCreatingPlane()
+    {
+        return creatingPlane;
     }
 }

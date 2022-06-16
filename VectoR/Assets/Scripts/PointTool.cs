@@ -10,7 +10,7 @@ public class PointTool : MonoBehaviour
     private bool placingPoint = false;
 
     // Temporary coordinate system
-    private GameObject tempCoordinateSystem;
+    public GameObject tempCoordinateSystem;
     // Temporary point position
     private Vector3 tempPosition;
 
@@ -42,9 +42,13 @@ public class PointTool : MonoBehaviour
         Transform transform = new GameObject().transform;
         GameObject point = Instantiate(_3DPoint, transform.position, transform.rotation);
         // Commented for debug purpose
-        // PointTransform pt = _3DPoint.GetComponent<PointTransform>();
-        // pt.CoordinateSystem = coordinateSystem;
-        // pt.position = position;
+        PointTransform pt = _3DPoint.GetComponent<PointTransform>();
+        if (pt)
+        {
+            pt.coordinateSystem = coordinateSystem;
+            pt.position = position;
+        }
+        
     }
 
     // Create a point withour coordinates
@@ -52,6 +56,11 @@ public class PointTool : MonoBehaviour
     {
         tempCoordinateSystem = coordinateSystem;
         placingPoint = true;
+    }
+
+    public void pointTool()
+    {
+        createPointFromNothing(tempCoordinateSystem);
     }
 }
 

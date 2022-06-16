@@ -45,11 +45,98 @@ public class MouseController : MonoBehaviour
     private void OnMouseUp()
     {
         Debug.Log("gameobject : "+ gameObject.name);
+
         // Mouse clicked detection
         if (_isMouseDown)
         {
+            // Using tools
             GameObject selectionManager = GameObject.Find("SelectionManager");
+            GameObject toolManager = GameObject.Find("ToolManager");
             _isMouseDown = false;
+            if(toolManager)
+            {
+                
+                VectorTool vt = toolManager.GetComponent<VectorTool>();
+                Debug.Log("tool manager + ceat vect ? : " + vt.isCreatingVector());
+                ProductTools pts = toolManager.GetComponent<ProductTools>();
+                PlanTool pt = toolManager.GetComponent<PlanTool>();
+                // Vector Tool
+                
+                if (vt.isCreatingVector())
+                {
+                    Debug.Log("try creat vect");
+                    GameObject selectedPoint = vt.getSelectedPoint();
+                    if (_mainObject.GetComponent<PointTransform>()!=null && selectedPoint!=null && gameObject != selectedPoint)
+                    {
+                        Debug.Log("try creat vect");
+
+                        PointTransform pt1 = selectedPoint.GetComponent<PointTransform>();
+                        PointTransform pt2 = gameObject.GetComponent<PointTransform>();
+                        if (pt1!=null && pt2!=null)
+                        {
+                            vt.createVectorFrom2points(pt1.coordinateSystem, pt1.position, pt2.position);
+                        }
+                    }
+                }
+                // Dot Product
+                else if (pts.isUsingDot())
+                {
+                    Debug.Log("try dot");
+                    GameObject selectedVector = pts.getSelectedVector();
+                    if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
+                    {
+                        VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                        // A CHANGER POUR VR
+                        VectorTransform vt2 = gameObject.GetComponentInParent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            pts.OnScalarProductTrigger(vt1.gameObject, vt2.gameObject);
+                        }
+                    }
+                }
+                else if (pts.isUsingCross())
+                {
+                    Debug.Log("try cross");
+                    GameObject selectedVector = pts.getSelectedVector();
+                    if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
+                    {
+                        VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                        // A CHANGER POUR VR
+                        VectorTransform vt2 = gameObject.GetComponentInParent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            pts.OnVectorProductTrigger(vt1.gameObject, vt2.gameObject);
+                        }
+                    }
+                }
+                else if (pt.isCreatingPlane())
+                {
+                    Debug.Log("1");
+                    GameObject selectedVector = pt.getSelectedVector();
+                    if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && _mainObject.GetComponent<VectorTransform>()?.gameObject != selectedVector)
+                    {
+                        Debug.Log("2");
+                        VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
+                        // A CHANGER POUR VR
+                        VectorTransform vt2 = gameObject.GetComponentInParent<VectorTransform>();
+                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
+                        if (vt1 != null && vt2 != null)
+                        {
+                            Debug.Log("3");
+                            pt.createPlanWithTwoVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.CoordinateSystem);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("4");
+                        pt.createPlanWith3DVector(selectedVector);
+                    }
+                }
+
+            }
+           
 
             if(_mainObject.GetComponent<PointTransform>())
             {

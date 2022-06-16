@@ -7,7 +7,7 @@ public class VectorTool : MonoBehaviour
     private bool firstPointPlaced;
     // Vector prefab to instanciate
     public GameObject _3DVector;
-
+    private bool creatingVector;
 
     // Boolean concerning le pacement of the vector points
     private bool placingP1 = false;
@@ -18,7 +18,10 @@ public class VectorTool : MonoBehaviour
     // Temporary endPoint position
     private Vector3 tempP2;
     // Temporary coordinate system
-    private GameObject tempCoorDystem;
+    public GameObject tempCoorDystem;
+
+
+    private GameObject selectedPoint;
 
     // Start is called before the first frame update
     void Awake()
@@ -55,7 +58,7 @@ public class VectorTool : MonoBehaviour
     // Create a vector based on its startPoint p1 and endPoint p2
     public void createVectorFrom2points(GameObject coordinateSystem, Vector3 p1, Vector3 p2)
     {
-
+        Debug.Log("instanciate");
         Transform transform = new GameObject().transform;
         GameObject vector = Instantiate(_3DVector, transform.position, transform.rotation);
         VectorTransform vt = vector.GetComponent<VectorTransform>();
@@ -64,7 +67,8 @@ public class VectorTool : MonoBehaviour
             vt.CoordinateSystem = coordinateSystem;
             vt.positionP1 = p1;
             vt.positionP2 = p2;
-        } 
+        }
+        creatingVector = false;
     }
 
     // Create a Vector without points
@@ -74,5 +78,35 @@ public class VectorTool : MonoBehaviour
         placingP1 = true;
     }
 
+    public void vectorTool()
+    {
+        GameObject selectionManager = GameObject.Find("SelectionManager");
+        if (selectionManager)
+        {
+            GameObject selectedobject = selectionManager.GetComponent<ObjectSelect>()?.getSelectedObject();
+            PointTransform pt = selectedobject.GetComponent<PointTransform>();
+            if (pt)
+            {
+                selectedPoint = selectedobject;
+                Debug.Log("????");
 
+                creatingVector = true;
+            }
+            else
+            {
+                createFromNothing(tempCoorDystem);
+            }
+
+        }
+    }
+
+    public GameObject getSelectedPoint()
+    {
+        return selectedPoint;
+    }
+
+    public bool isCreatingVector()
+    {
+        return creatingVector;
+    }
 }
