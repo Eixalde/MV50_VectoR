@@ -45,13 +45,14 @@ public class VectorTransform : MonoBehaviour
         {
             CheckSelection();
             setTransformFromPoints();
+            //Debug.Log("Vector P1 pos : " + positionP1);
         }
     }
 
     // Select a part of the object and outline it
     public void Select(GameObject objectSelected)
     {
-        Debug.Log("FUNCTION CALLED");
+        //Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
             showPoints(false);
@@ -224,6 +225,11 @@ public class VectorTransform : MonoBehaviour
     public Vector3 getPositionP1()
     {
         return positionP1;
+    }
+
+    public Vector3 getVector()
+    {
+        return positionP2 - positionP1;
     }
 
 

@@ -8,7 +8,8 @@ public class VectorTool : MonoBehaviour
     // Vector prefab to instanciate
     public GameObject _3DVector;
 
- 
+
+    // Boolean concerning le pacement of the vector points
     private bool placingP1 = false;
     private bool placingP2 = false;
 
@@ -54,14 +55,16 @@ public class VectorTool : MonoBehaviour
     // Create a vector based on its startPoint p1 and endPoint p2
     public void createVectorFrom2points(GameObject coordinateSystem, Vector3 p1, Vector3 p2)
     {
-        Debug.Log("creating vect");
+
         Transform transform = new GameObject().transform;
         GameObject vector = Instantiate(_3DVector, transform.position, transform.rotation);
         VectorTransform vt = vector.GetComponent<VectorTransform>();
-        vt.CoordinateSystem = coordinateSystem;
-        vt.positionP1 = p1;
-        vt.positionP2 = p2;
-
+        if (vt)
+        {
+            vt.CoordinateSystem = coordinateSystem;
+            vt.positionP1 = p1;
+            vt.positionP2 = p2;
+        } 
     }
 
     // Create a Vector without points

@@ -44,32 +44,55 @@ public class MouseController : MonoBehaviour
     // Detects when mouse left button is down
     private void OnMouseUp()
     {
+        Debug.Log("gameobject : "+ gameObject.name);
         // Mouse clicked detection
         if (_isMouseDown)
         {
             GameObject selectionManager = GameObject.Find("SelectionManager");
             _isMouseDown = false;
+
+            if(_mainObject.GetComponent<PointTransform>())
+            {
+                _mainObject.GetComponent<PointTransform>().Select(true);
+                if (selectionManager)
+                {
+                    selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
+            }
+
             // Select a 3DVector object
             if (_mainObject.GetComponent<VectorTransform>() != null)
             {
-                Debug.Log("CALL FUNCTION SELECT POINT");
-                Debug.Log("Object selected : " + gameObject.transform.parent.gameObject.name);
+                //Debug.Log("CALL FUNCTION SELECT POINT");
+                //Debug.Log("Object selected : " + gameObject.transform.parent?.gameObject.name);
 
                 _mainObject.GetComponent<VectorTransform>().Select(gameObject);
 
                 if (selectionManager != null)
                 {
-                    if (_mainObject.transform.parent.gameObject.name == "3DVector")
+                    if (_mainObject.transform.parent?.gameObject.GetComponent<VectorTransform>() != null)
+                    {
                         selectionManager.GetComponent<ObjectSelect>().select(_mainObject.transform.parent.gameObject);
+                    }
                     else
                         selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
                 }
             }
             // Select a CoordinateSystem object
-            else if (_mainObject.GetComponent<CoordinateSystemTransform>() != null)
+            else if (_mainObject.GetComponent<CoordinateSystemTransform>())
             {
-                _mainObject.GetComponent<CoordinateSystemTransform>().Select(true);
-                if (selectionManager != null)
+               _mainObject.GetComponent<CoordinateSystemTransform>().Select(true);
+                if (selectionManager)
+                {
+                    selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
+                }
+            }
+            // Select a Plan object
+            else if (_mainObject.GetComponent<PlanTransform>())
+            {
+                _mainObject.GetComponent<PlanTransform>().Select(true);
+
+                if (selectionManager)
                 {
                     selectionManager.GetComponent<ObjectSelect>().select(_mainObject);
                 }
@@ -93,7 +116,11 @@ public class MouseController : MonoBehaviour
     void OnMouseDrag()
     {
         // Set position of a 3DVector object
-        if (_mainObject.GetComponent<VectorTransform>() != null)
+        if (_mainObject.GetComponent<PointTransform>())
+        {
+            _mainObject.GetComponent<PointTransform>().setPosition(GetMouseAsWorldPoint() + mOffset);
+        }
+        else if (_mainObject.GetComponent<VectorTransform>() != null)
         {
             _mainObject.GetComponent<VectorTransform>().setPosition(GetMouseAsWorldPoint() + mOffset, gameObject.name);
         }
@@ -101,6 +128,11 @@ public class MouseController : MonoBehaviour
         else if (_mainObject.GetComponent<CoordinateSystemTransform>() != null)
         {
             _mainObject.GetComponent<CoordinateSystemTransform>().setPosition(GetMouseAsWorldPoint() + mOffset);
+        }
+        // Set position of a Plan object
+        else if (_mainObject.GetComponent<PlanTransform>())
+        {
+            _mainObject.GetComponent<PlanTransform>()._vector3D.GetComponent<VectorTransform>().setPosition(GetMouseAsWorldPoint() + mOffset, gameObject.name);
         }
         else
         {
