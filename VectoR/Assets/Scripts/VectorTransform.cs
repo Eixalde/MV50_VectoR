@@ -15,7 +15,7 @@ public class VectorTransform : MonoBehaviour
     // Model of the arrowHead of the vector 
     public GameObject arrowHead;
 
-    public GameObject CoordinateSystem;
+    public GameObject coordinateSystem;
 
     // Information to use to position the vector
     // -> true : uses the position of the object in the scene
@@ -105,20 +105,32 @@ public class VectorTransform : MonoBehaviour
 
         if (selectedID == 0 && name == "P1")
         {
-            positionP1 = newPosition - CoordinateSystem.transform.position;
+            positionP1 = newPosition - coordinateSystem.transform.position;
         }
         else if (selectedID == 1 && name == "P2")
         {
-            if (positionP2 != newPosition - CoordinateSystem.transform.position)
-            positionP2 = newPosition - CoordinateSystem.transform.position;
+            if (positionP2 != newPosition - coordinateSystem.transform.position)
+            positionP2 = newPosition - coordinateSystem.transform.position;
         }
         else if (selectedID == 3 && (name == "VectorAxis" || name == "PM"))
         {
             Vector3 middlePoint = (positionP1 + positionP2) / 2;
             Vector3 translation = newPosition - middlePoint;
-            positionP1 += translation - CoordinateSystem.transform.position;
-            positionP2 += translation - CoordinateSystem.transform.position;
+            positionP1 += translation - coordinateSystem.transform.position;
+            positionP2 += translation - coordinateSystem.transform.position;
         }
+    }
+
+    // Set position of P1 from word position
+    public void setPositionP1(Vector3 newPosition)
+    {
+        positionP1 = newPosition - coordinateSystem.transform.position;
+    }
+
+    // Set position of P2 from word position
+    public void setPositionP2(Vector3 newPosition)
+    {
+        positionP2 = newPosition - coordinateSystem.transform.position;
     }
 
 
@@ -128,10 +140,10 @@ public class VectorTransform : MonoBehaviour
     {
         Vector3 pos1 = positionP1;
         Vector3 pos2 = positionP2;
-        if (CoordinateSystem != null)
+        if (coordinateSystem != null)
         {
-            positionP1 += CoordinateSystem.transform.position;
-            positionP2 += CoordinateSystem.transform.position;
+            positionP1 += coordinateSystem.transform.position;
+            positionP2 += coordinateSystem.transform.position;
         }
 
 

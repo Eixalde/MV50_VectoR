@@ -33,7 +33,7 @@ public class ProductTools : MonoBehaviour
             if (vt)
             {
                 Debug.Log("vector creation");
-                vt.createVectorFrom2points(vt1.CoordinateSystem, vt1.positionP1, vt1.positionP1 + vectorProductDirection);
+                vt.createVectorFrom2CoordinateSystemPoints(vt1.coordinateSystem, vt1.positionP1, vt1.positionP1 + vectorProductDirection);
                 usingCrossProduct = false;
             }
         }
@@ -64,7 +64,8 @@ public class ProductTools : MonoBehaviour
             of the first vector and the height is the norm of the second vector times the angle between both angles. */
             Vector3 areaScale = new Vector3(normV1, 0.001f, scalarProductValue / normV1);
             Debug.Log("sc fin");
-            GameObject area = Instantiate(_scalarPlane, vt1.positionP1, normalToArea);
+            // instanciate in world
+            GameObject area = Instantiate(_scalarPlane, vt1.positionP1 + vt1.coordinateSystem.transform.position, normalToArea);
             area.transform.localScale = areaScale;
             PlaneLocation pl = area.GetComponentInChildren<PlaneLocation>();
             if (pl)

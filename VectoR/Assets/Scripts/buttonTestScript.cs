@@ -24,7 +24,7 @@ public class buttonTestScript : MonoBehaviour
     public void test2pointVector()
     {
         VectorTool vt = GetComponent<VectorTool>();
-        vt.createVectorFrom2points(coordinateSystem, new Vector3(0, 0, 0), new Vector3(1, 2, 1));
+        vt.createVectorFrom2CoordinateSystemPoints(coordinateSystem, new Vector3(0, 0, 0), new Vector3(1, 2, 1));
     }
 
     // Test method of creation of a vector from nothing

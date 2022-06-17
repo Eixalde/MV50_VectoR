@@ -60,7 +60,7 @@ public class PlanTool : MonoBehaviour
                 tempP2 = GameObject.Find("RightHand Controller").transform.position; ;
                 placingP2 = false;
                 Vector3 temp = tempP2 - tempP1;
-                createPlanWithVector(temp, tempP1, tempCoordinateSystem);
+                createPlanWithWorldVector(temp, tempP1, tempCoordinateSystem);
             }
         }
     }
@@ -92,7 +92,7 @@ public class PlanTool : MonoBehaviour
 
             vtPlan.positionP1 = vtVect.positionP1;
             vtPlan.positionP2 = vtVect.positionP2;
-            vtPlan.CoordinateSystem = tempCoordinateSystem;
+            vtPlan.coordinateSystem = tempCoordinateSystem;
             pt._vector3D.SetActive(true);
 
             GrabbableBehavior gbPlan = plan.GetComponent<GrabbableBehavior>();
@@ -112,17 +112,23 @@ public class PlanTool : MonoBehaviour
                 TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                 gbVect.positions = positionText;
             }
-            ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
-            os.select(plan);
         }
-        
+        ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
+        os.select(plan);
+
         creatingPlane = false;
     }
 
+    public void createPlanWithWorldVector(Vector3 vector, Vector3 point, GameObject coordinateSystem)
+    {
+        Vector3 coordPoint = point - coordinateSystem.transform.position;
+        createPlanWithCoordinateVector(vector, coordPoint, coordinateSystem);
+    }
+
     /* 
-     * Create a plan using a Vector, a Point and a Coordinate Systeme
+     * Create a plan using a Vector, a Point and a Coordinate System
      */
-    public void createPlanWithVector(Vector3 vector, Vector3 point, GameObject coordinateSystem)
+    public void createPlanWithCoordinateVector(Vector3 vector, Vector3 point, GameObject coordinateSystem)
     {
         //Debug.Log("creating 1 vector plan");
         Transform transform = new GameObject().transform;
@@ -134,9 +140,11 @@ public class PlanTool : MonoBehaviour
             VectorTransform vt = pt._vector3D.GetComponent<VectorTransform>();
             if (vt)
             {
+                // Setting point from world pos to coord pos
+                vt.coordinateSystem = coordinateSystem;
                 vt.positionP1 = point;
                 vt.positionP2 = point + vector;
-                vt.CoordinateSystem = coordinateSystem;
+
                 GrabbableBehavior gb = plan.GetComponent<GrabbableBehavior>();
                 if (gb)
                 {
@@ -158,20 +166,20 @@ public class PlanTool : MonoBehaviour
                     TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                     gbVect.positions = positionText;
                 }
-            }
-            ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
-            os.select(plan);
+            }      
         }
+        ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
+        os.select(plan);
         creatingPlane = false;
     }
     /*
      * Create a plan using two non colinear vectors, a Point and a Coordonate System
      */
-    public void createPlanWithTwoVector(Vector3 vector1, Vector3 vector2, Vector3 point, GameObject coordinateSystem)
+    public void createPlanWithTwoCoordinateVector(Vector3 vector1, Vector3 vector2, Vector3 point, GameObject coordinateSystem)
     {
         //Debug.Log("creating 2 vector plan");
         Vector3 vector = Vector3.Cross(vector1, vector2);
-        createPlanWithVector(vector, point, coordinateSystem);
+        createPlanWithCoordinateVector(vector, point, coordinateSystem);
         creatingPlane = false;
     }
 

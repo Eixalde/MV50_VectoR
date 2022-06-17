@@ -35,23 +35,14 @@ public class PointTool : MonoBehaviour
     {
         InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
 
-
-
         if (placingPoint)
         {
-            Debug.Log("Placing point : " + placingPoint + "can press A: " + aPressed.canAbePressed());
-            Debug.Log("position " + GameObject.Find("RightHand Controller").transform.position);
             if (aPressed.isApressed())
             {
-
-                // Converting mouse position to 3D coordinates
+                // Getting right hand position
                 tempPosition = GameObject.Find("RightHand Controller").transform.position;
-                Debug.Log("temp position " + tempPosition);
-                Vector3 pos = tempPosition - tempCoordinateSystem.transform.position;
-                Debug.Log("pos " + pos);
-
                 placingPoint = false;
-                createPoint(tempCoordinateSystem, pos);
+                createPoint(tempCoordinateSystem, tempPosition);
 
             }
         }
@@ -60,11 +51,10 @@ public class PointTool : MonoBehaviour
     // Create Point based on coordinates and a coordinate system
     public void createPoint(GameObject coordinateSystem, Vector3 position)
     {
-        Debug.Log("creation pos " + position);
-
         Transform transform = new GameObject().transform;
         GameObject point = Instantiate(_3DPoint, transform.position, transform.rotation);
-        // Commented for debug purpose
+        Destroy(transform.gameObject);
+
         PointTransform pt = point.GetComponent<PointTransform>();
         if (pt)
         {

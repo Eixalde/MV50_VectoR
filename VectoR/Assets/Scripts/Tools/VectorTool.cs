@@ -47,7 +47,7 @@ public class VectorTool : MonoBehaviour
         {
             if (aPressed.isApressed())
             {
-                // Converting mouse position to 3D coordinates
+                // Getting rightHandPosition
                 tempP1 = GameObject.Find("RightHand Controller").transform.position;
                 placingP1 = false;
                 placingP2 = true;
@@ -57,16 +57,29 @@ public class VectorTool : MonoBehaviour
         {
             if(aPressed.isApressed())
             {
-                // Converting mouse position to 3D coordinates
+                // Getting rightHandPosition
                 tempP2 = GameObject.Find("RightHand Controller").transform.position;
                 placingP2 = false;
-                createVectorFrom2points(tempCoorDystem, tempP1, tempP2);
+                createVectorFrom2WorldPoints(tempCoorDystem, tempP1, tempP2);
             }
         }
     }
 
+    public void createVectorFrom2WorldPoints(GameObject coordinateSystem, Vector3 p1, Vector3 p2)
+    {
+        Debug.Log("wesh ? " + coordinateSystem);
+        if (coordinateSystem)
+        {
+            Vector3 posOffset = coordinateSystem.transform.position;
+            Vector3 p1Coord = p1 - posOffset;
+            Vector3 p2Coord = p2 - posOffset;
+            createVectorFrom2CoordinateSystemPoints(coordinateSystem, p1Coord, p2Coord);
+        }
+    }
+
+
     // Create a vector based on its startPoint p1 and endPoint p2
-    public void createVectorFrom2points(GameObject coordinateSystem, Vector3 p1, Vector3 p2)
+    public void createVectorFrom2CoordinateSystemPoints(GameObject coordinateSystem, Vector3 p1, Vector3 p2)
     {
         Debug.Log("instanciate");
         Transform transform = new GameObject().transform;
@@ -74,7 +87,7 @@ public class VectorTool : MonoBehaviour
         VectorTransform vt = vector.GetComponent<VectorTransform>();
         if (vt)
         {
-            vt.CoordinateSystem = coordinateSystem;
+            vt.coordinateSystem = coordinateSystem;
             vt.positionP1 = p1;
             vt.positionP2 = p2;
             GrabbableBehavior gb = vector.GetComponent<GrabbableBehavior>();

@@ -64,7 +64,7 @@ public class GrabbableBehavior : MonoBehaviour
                             PointTransform pt2 = os.getSelectedObject().GetComponent<PointTransform>();
                             if (pt1 != null && pt2 != null)
                             {
-                                vt.createVectorFrom2points(pt1.coordinateSystem, pt1.position, pt2.position);
+                                vt.createVectorFrom2CoordinateSystemPoints(pt1.coordinateSystem, pt1.position, pt2.position);
                             }
                         }
                     }
@@ -95,6 +95,7 @@ public class GrabbableBehavior : MonoBehaviour
                     
                 }
             }
+            // Cross product
             else if (pts.isUsingCross())
             {
                 Debug.Log("try cross");
@@ -115,6 +116,7 @@ public class GrabbableBehavior : MonoBehaviour
 
                 }
             }
+            // Plan tool
             else if (pt.isCreatingPlane())
             {
                 Debug.Log("1");
@@ -132,7 +134,7 @@ public class GrabbableBehavior : MonoBehaviour
                         if (vt1 != null && vt2 != null)
                         {
                             Debug.Log("3");
-                            pt.createPlanWithTwoVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.CoordinateSystem);
+                            pt.createPlanWithTwoCoordinateVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.coordinateSystem);
                         }
                     }
                     else if (aPressed.isAreleased())

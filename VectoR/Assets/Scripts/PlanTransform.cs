@@ -81,7 +81,7 @@ public class PlanTransform : MonoBehaviour
         {
             Vector3 positionVect = vt.getPositionP1();
             Vector3 pos = positionVect;
-            GameObject coordinateSystem = vt.CoordinateSystem;
+            GameObject coordinateSystem = vt.coordinateSystem;
 
             if (coordinateSystem != null)
             {
