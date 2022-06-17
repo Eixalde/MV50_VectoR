@@ -86,19 +86,19 @@ public class PlanTool : MonoBehaviour
         PlanTransform pt = plan.GetComponent<PlanTransform>();
         if(pt)
         {
+            
             VectorTransform vtPlan = pt._vector3D.GetComponent<VectorTransform>();
-            VectorTransform vtVect = pt._vector3D.GetComponent<VectorTransform>();
+            VectorTransform vtVect = _3Dvector.GetComponent<VectorTransform>();
 
-            vtPlan.positionP1 = vtPlan.positionP1;
+            vtPlan.positionP1 = vtVect.positionP1;
             vtPlan.positionP2 = vtVect.positionP2;
-            GameObject coordinateSystem = vtVect.CoordinateSystem;
-            vtPlan.CoordinateSystem = coordinateSystem;
+            vtPlan.CoordinateSystem = tempCoordinateSystem;
             pt._vector3D.SetActive(true);
 
             GrabbableBehavior gbPlan = plan.GetComponent<GrabbableBehavior>();
             if (gbPlan)
             {
-                gbPlan._coordSystem = coordinateSystem;
+                gbPlan._coordSystem = tempCoordinateSystem;
                 Debug.Log("text pos ? " + GameObject.Find("Positions"));
                 TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                 gbPlan.positions = positionText;
@@ -107,12 +107,13 @@ public class PlanTool : MonoBehaviour
             GrabbableBehavior gbVect = vtPlan.GetComponent<GrabbableBehavior>();
             if (gbVect)
             {
-                gbVect._coordSystem = coordinateSystem;
+                gbVect._coordSystem = tempCoordinateSystem;
                 Debug.Log("text pos ? " + GameObject.Find("Positions"));
                 TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                 gbVect.positions = positionText;
             }
-            
+            ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
+            os.select(plan);
         }
         
         creatingPlane = false;
@@ -158,6 +159,8 @@ public class PlanTool : MonoBehaviour
                     gbVect.positions = positionText;
                 }
             }
+            ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
+            os.select(plan);
         }
         creatingPlane = false;
     }

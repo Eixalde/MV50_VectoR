@@ -46,7 +46,7 @@ public class PointTransform : MonoBehaviour
         if (selectionManager == null)
             return;
 
-        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
+        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
             Select(false);
     }
 }

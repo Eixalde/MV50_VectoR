@@ -40,7 +40,7 @@ public class PlanTransform : MonoBehaviour
         if (selectionManager == null)
             return;
 
-        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != _vector3D.name && selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
+        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != _vector3D && selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
         {
             Select(false);
             _vector3D.SetActive(false);

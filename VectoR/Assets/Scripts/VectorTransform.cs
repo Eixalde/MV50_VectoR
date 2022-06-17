@@ -55,9 +55,10 @@ public class VectorTransform : MonoBehaviour
         //Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
+            GetComponent<Outline>().enabled = false;
             showPoints(false);
             selectedID = -1;
-            GetComponent<Outline>().enabled = false;
+            
             return;
         }
 
@@ -211,7 +212,7 @@ public class VectorTransform : MonoBehaviour
         if (selectionManager == null)
             return;
 
-        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
+        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
             Select(null);
     }
 
