@@ -23,15 +23,15 @@ public class PlanTool : MonoBehaviour
     private bool creatingPlane;
     public InputActionAsset inputActions;
 
-
-
     private APressedDelay aPressed;
+    private ToolGestion tg;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        tg = GetComponent<ToolGestion>();
         aPressed = GetComponent<APressedDelay>();
     }
 
@@ -177,6 +177,10 @@ public class PlanTool : MonoBehaviour
 
     public void planTool()
     {
+        if (tg)
+        {
+            tg.deselectAllTools();
+        }
         GameObject selectionManager = GameObject.Find("SelectionManager");
         if (selectionManager)
         {
@@ -204,4 +208,11 @@ public class PlanTool : MonoBehaviour
     {
         return creatingPlane;
     }
+
+    public void deselectPlaneTool()
+    {
+        creatingPlane = false;
+        placingP1 = false;
+        placingP2 = false;
+}
 }

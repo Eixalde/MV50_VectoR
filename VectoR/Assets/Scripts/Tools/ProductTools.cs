@@ -9,10 +9,16 @@ public class ProductTools : MonoBehaviour
     public GameObject selectedVector;
     private bool usingDotProduct;
     private bool usingCrossProduct;
+    private ToolGestion tg;
+
+    public void Start()
+    {
+        tg = GetComponent<ToolGestion>();
+    }
 
     /* Function called when two vectors are selected and the trigger for vectorial product is on. It needs the two gameobjects corresponding
     to the vectors. It creates a 3D Vector corresponding to the vectorial product of the two first vectors. */
-    public void OnVectorProductTrigger (GameObject vector_one, GameObject vector_two)
+    public void crossProductFromVector (GameObject vector_one, GameObject vector_two)
     {
         VectorTransform vt1 = vector_one.GetComponent<VectorTransform>();
         VectorTransform vt2 = vector_two.GetComponent<VectorTransform>();
@@ -36,7 +42,7 @@ public class ProductTools : MonoBehaviour
 
     /* Function called when two vectors are selected and the trigger for scalar product is on. It needs the two gameobjects corresponding
     to the vectors. It creates a rectangle that corresponds to a specific area, that is geometrically related to both vectors. */
-    public void OnScalarProductTrigger (GameObject vector_one, GameObject vector_two)
+    public void dotProductFromVectors (GameObject vector_one, GameObject vector_two)
     {
         VectorTransform vt1 = vector_one.GetComponent<VectorTransform>();
         VectorTransform vt2 = vector_two.GetComponent<VectorTransform>();
@@ -74,6 +80,10 @@ public class ProductTools : MonoBehaviour
 
     public void dotProduct()
     {
+        if (tg)
+        {
+            tg.deselectAllTools();
+        }
         GameObject selectionManager = GameObject.Find("SelectionManager");
         if (selectionManager)
         {
@@ -89,7 +99,10 @@ public class ProductTools : MonoBehaviour
 
     public void crossProduct()
     {
-
+        if (tg)
+        {
+            tg.deselectAllTools();
+        }
         GameObject selectionManager = GameObject.Find("SelectionManager");
         if (selectionManager)
         {
@@ -117,5 +130,11 @@ public class ProductTools : MonoBehaviour
     public bool isUsingCross()
     {
         return usingCrossProduct;
+    }
+
+    public void deselectProductTools()
+    {
+        usingCrossProduct = false;
+        usingDotProduct = false;
     }
 }

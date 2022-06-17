@@ -89,7 +89,7 @@ public class GrabbableBehavior : MonoBehaviour
                         Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
                         {
-                            pts.OnScalarProductTrigger(vt1.gameObject, vt2.gameObject);
+                            pts.dotProductFromVectors(vt1.gameObject, vt2.gameObject);
                         }
                     }
                     
@@ -109,7 +109,7 @@ public class GrabbableBehavior : MonoBehaviour
                         Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
                         {
-                            pts.OnVectorProductTrigger(vt1.gameObject, vt2.gameObject);
+                            pts.crossProductFromVector(vt1.gameObject, vt2.gameObject);
                         }
                     }
 

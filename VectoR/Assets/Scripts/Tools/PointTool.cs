@@ -20,11 +20,13 @@ public class PointTool : MonoBehaviour
 
     private APressedDelay aPressed;
 
+    private ToolGestion tg;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        tg = GetComponent<ToolGestion>();
         aPressed = GetComponent<APressedDelay>();
     }
 
@@ -90,7 +92,16 @@ public class PointTool : MonoBehaviour
 
     public void pointTool()
     {
+        if (tg)
+        {
+            tg.deselectAllTools();
+        }
         createPointFromNothing(tempCoordinateSystem);
+    }
+
+    public void deselectPointTool()
+    {
+        placingPoint = false;
     }
 }
 

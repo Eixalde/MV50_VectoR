@@ -27,20 +27,13 @@ public class VectorTool : MonoBehaviour
 
     public InputActionAsset inputActions;
 
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        
-    }
-
     private APressedDelay aPressed;
-
-
+    private ToolGestion tg;
 
     // Start is called before the first frame update
     void Start()
     {
+        tg = GetComponent<ToolGestion>();
         aPressed = GetComponent<APressedDelay>();
     }
 
@@ -113,6 +106,11 @@ public class VectorTool : MonoBehaviour
 
     public void vectorTool()
     {
+        if (tg)
+        {
+            tg.deselectAllTools();
+            Debug.Log("deselect All");
+        }
         GameObject selectionManager = GameObject.Find("SelectionManager");
         if (selectionManager)
         {
@@ -141,5 +139,12 @@ public class VectorTool : MonoBehaviour
     public bool isCreatingVector()
     {
         return creatingVector;
+    }
+
+    public void deselectVectorTool()
+    {
+        creatingVector = false;
+        placingP1 = false;
+        placingP2 = false;
     }
 }
