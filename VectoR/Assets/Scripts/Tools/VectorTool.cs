@@ -84,6 +84,22 @@ public class VectorTool : MonoBehaviour
             vt.CoordinateSystem = coordinateSystem;
             vt.positionP1 = p1;
             vt.positionP2 = p2;
+            GrabbableBehavior gb = vector.GetComponent<GrabbableBehavior>();
+            if (gb)
+            {
+                gb._coordSystem = coordinateSystem;
+                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+                gb.positions = positionText;
+                Debug.Log("for each ? " + vt.gameObject.GetComponentsInChildren<GrabbableBehavior>().Length);
+                foreach(GrabbableBehavior grabbable in vt.gameObject.GetComponentsInChildren<GrabbableBehavior>())
+                {
+                    Debug.Log("grabbble : " + grabbable.positions);
+                    Debug.Log("positionText " + positionText);
+
+                    grabbable.positions = positionText;
+                }
+            }
         }
         creatingVector = false;
     }

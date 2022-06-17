@@ -32,16 +32,24 @@ public class PointTool : MonoBehaviour
     void Update()
     {
         InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
-        Debug.Log("Placing point : " + placingPoint  + "A pressed : " + aPressed.debugIsAPressed());
+
+
+
         if (placingPoint)
         {
+            Debug.Log("Placing point : " + placingPoint + "can press A: " + aPressed.canAbePressed());
+            Debug.Log("position " + GameObject.Find("RightHand Controller").transform.position);
             if (aPressed.isApressed())
             {
+
                 // Converting mouse position to 3D coordinates
                 tempPosition = GameObject.Find("RightHand Controller").transform.position;
-                
+                Debug.Log("temp position " + tempPosition);
+                Vector3 pos = tempPosition - tempCoordinateSystem.transform.position;
+                Debug.Log("pos " + pos);
+
                 placingPoint = false;
-                createPoint(tempCoordinateSystem, tempPosition);
+                createPoint(tempCoordinateSystem, pos);
 
             }
         }
@@ -50,16 +58,27 @@ public class PointTool : MonoBehaviour
     // Create Point based on coordinates and a coordinate system
     public void createPoint(GameObject coordinateSystem, Vector3 position)
     {
+        Debug.Log("creation pos " + position);
+
         Transform transform = new GameObject().transform;
         GameObject point = Instantiate(_3DPoint, transform.position, transform.rotation);
         // Commented for debug purpose
-        PointTransform pt = _3DPoint.GetComponent<PointTransform>();
+        PointTransform pt = point.GetComponent<PointTransform>();
         if (pt)
         {
             pt.coordinateSystem = coordinateSystem;
-            pt.position = position;
+            pt.setPosition(position);
+            GrabbableBehavior gb = point.GetComponent<GrabbableBehavior>();
+            if(gb)
+            {
+                gb._coordSystem = coordinateSystem;
+                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                gb.positions = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+            }
         }
-        
+
+        Debug.Log("final position " + point.transform.position);
+
     }
 
     // Create a point withour coordinates

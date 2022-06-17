@@ -45,7 +45,7 @@ public class PlanTool : MonoBehaviour
         {
             if (aPressed.isApressed())
             {
-                // Converting mouse position to 3D coordinates
+                // Using right hand coordinates
                 tempP1 = GameObject.Find("RightHand Controller").transform.position;
                 placingP1 = false;
                 placingP2 = true;
@@ -56,8 +56,8 @@ public class PlanTool : MonoBehaviour
         {
             if (aPressed.isApressed())
             {
-                // Converting mouse position to 3D coordinates
-                tempP2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                // Using right hand coordinates
+                tempP2 = GameObject.Find("RightHand Controller").transform.position; ;
                 placingP2 = false;
                 Vector3 temp = tempP2 - tempP1;
                 createPlanWithVector(temp, tempP1, tempCoordinateSystem);
@@ -86,11 +86,33 @@ public class PlanTool : MonoBehaviour
         PlanTransform pt = plan.GetComponent<PlanTransform>();
         if(pt)
         {
-            pt._vector3D.GetComponent<VectorTransform>().positionP1 = _3Dvector.GetComponent<VectorTransform>().positionP1;
-            pt._vector3D.GetComponent<VectorTransform>().positionP2 = _3Dvector.GetComponent<VectorTransform>().positionP2;
-            pt._vector3D.GetComponent<VectorTransform>().CoordinateSystem = _3Dvector.GetComponent<VectorTransform>().CoordinateSystem;
+            VectorTransform vtPlan = pt._vector3D.GetComponent<VectorTransform>();
+            VectorTransform vtVect = pt._vector3D.GetComponent<VectorTransform>();
+
+            vtPlan.positionP1 = vtPlan.positionP1;
+            vtPlan.positionP2 = vtVect.positionP2;
+            GameObject coordinateSystem = vtVect.CoordinateSystem;
+            vtPlan.CoordinateSystem = coordinateSystem;
             pt._vector3D.SetActive(true);
-           
+
+            GrabbableBehavior gbPlan = plan.GetComponent<GrabbableBehavior>();
+            if (gbPlan)
+            {
+                gbPlan._coordSystem = coordinateSystem;
+                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+                gbPlan.positions = positionText;
+
+            }
+            GrabbableBehavior gbVect = vtPlan.GetComponent<GrabbableBehavior>();
+            if (gbVect)
+            {
+                gbVect._coordSystem = coordinateSystem;
+                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+                gbVect.positions = positionText;
+            }
+            
         }
         
         creatingPlane = false;
@@ -107,14 +129,35 @@ public class PlanTool : MonoBehaviour
         PlanTransform pt = plan.GetComponent<PlanTransform>();
         if(pt)
         {
+            
             VectorTransform vt = pt._vector3D.GetComponent<VectorTransform>();
             if (vt)
             {
                 vt.positionP1 = point;
                 vt.positionP2 = point + vector;
                 vt.CoordinateSystem = coordinateSystem;
+                GrabbableBehavior gb = plan.GetComponent<GrabbableBehavior>();
+                if (gb)
+                {
+                    gb._coordSystem = coordinateSystem;
+                    Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                    TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+                    gb.positions = positionText;
+                    Debug.Log("for each ? " + pt.gameObject.GetComponentsInChildren<GrabbableBehavior>().Length);
+                    foreach (GrabbableBehavior grabbable in pt.gameObject.GetComponentsInChildren<GrabbableBehavior>())
+                    {
+                        grabbable.positions = positionText;
+                    }
+                }
+                GrabbableBehavior gbVect = vt.GetComponent<GrabbableBehavior>();
+                if (gbVect)
+                {
+                    gbVect._coordSystem = coordinateSystem;
+                    Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                    TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
+                    gbVect.positions = positionText;
+                }
             }
-            pt._vector3D.SetActive(true);
         }
         creatingPlane = false;
     }

@@ -42,6 +42,7 @@ public class GrabbableBehavior : MonoBehaviour
         {
 
             VectorTool vt = toolManager.GetComponent<VectorTool>();
+            APressedDelay aPressed = toolManager.GetComponent<APressedDelay>();
             Debug.Log("tool manager + ceat vect ? : " + vt.isCreatingVector());
             ProductTools pts = toolManager.GetComponent<ProductTools>();
             PlanTool pt = toolManager.GetComponent<PlanTool>();
@@ -67,7 +68,7 @@ public class GrabbableBehavior : MonoBehaviour
                             }
                         }
                     }
-                    else
+                    else if (aPressed.isAreleased())
                     {
                         vt.createFromNothing(vt.tempCoorDystem);
                     }
@@ -103,7 +104,7 @@ public class GrabbableBehavior : MonoBehaviour
                     VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
                     if(hover)
                     {
-                        // A CHANGER POUR VR
+                        // CHANGED
                         VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
                         Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
@@ -118,13 +119,14 @@ public class GrabbableBehavior : MonoBehaviour
             {
                 Debug.Log("1");
                 GameObject selectedVector = pt.getSelectedVector();
-                if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && _mainObject.GetComponent<VectorTransform>()?.gameObject != selectedVector)
+
+                if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
                 {
-                    Debug.Log("2");
+                    Debug.Log("2 can release A ? " + aPressed.canAbeReleased());
                     VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
                     if (hover)
                     {
-                        // A CHANGER POUR VR
+                        // CHANGED
                         VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
                         Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
@@ -133,13 +135,14 @@ public class GrabbableBehavior : MonoBehaviour
                             pt.createPlanWithTwoVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.CoordinateSystem);
                         }
                     }
-                    
+                    else if (aPressed.isAreleased())
+                    {
+                        Debug.Log("4");
+                        pt.createPlanWith3DVector(selectedVector);
+                    }
+
                 }
-                else
-                {
-                    Debug.Log("4");
-                    pt.createPlanWith3DVector(selectedVector);
-                }
+                
             }
 
         }
@@ -187,7 +190,8 @@ public class GrabbableBehavior : MonoBehaviour
         Vector3 relativePosition = transform.position;
         if (_coordSystem != null)
             relativePosition -= _coordSystem.transform.position;
-        positions.text = name + "\nX = " + relativePosition.x + "\nY = " + relativePosition.y + "\nZ = " + relativePosition.z;
+        if(positions)
+            positions.text = name + "\nX = " + relativePosition.x + "\nY = " + relativePosition.y + "\nZ = " + relativePosition.z;
     }
     public void addXPosition()
     {
