@@ -5,14 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Hologram.unity
     guid: dc61decdc5f385c4d862938118651597
   - enabled: 1
     path: Assets/Scenes/Classroom.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/ManipulationRoom.unity
     guid: acb5ca37ae4e00e439551fa03cb3b51b
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d56a4f50b52174c4d8166a77ae3160d4, type: 2}

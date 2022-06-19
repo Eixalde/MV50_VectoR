@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class CoordinateSystemTransform : MonoBehaviour
 {
+    GameObject selectionManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     // Update is called once per frame
@@ -27,14 +29,10 @@ public class CoordinateSystemTransform : MonoBehaviour
         GetComponent<Outline>().enabled = select;
     }
 
+    // Check if the coordinate system is still selected
     private void CheckSelection()
-    {
-        GameObject selectionManager = GameObject.Find("SelectionManager");
-        if (selectionManager == null)
-            return;
-        
-        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject().name != gameObject.name)
+    {  
+        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
             Select(false);
     }
-
 }

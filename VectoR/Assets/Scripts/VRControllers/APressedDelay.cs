@@ -3,11 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/* 
+ * Class used to know when A is press and release only one time
+ * ex : Abutton.IsPressed() returns true
+ *      isApress is called and returns true
+ *      isApress is called a second time, it returns false
+ */
+
 public class APressedDelay : MonoBehaviour
 {
+    // Indicate if A has been pressed
     private bool AhasBeenPressed = false;
+    // Indicate if A has been realeased
     private bool AhasBeenReleased = false;
+    // Indicate if A can be released
+    // True when A is no longer pressed from less than the releaseTime
     private bool AReleasable = false;
+    // Time during wich A is releasable 
+    private float releaseTime = 0.5f;
+
+    // Variables used to know if A is currently pressed
     public InputActionAsset inputActions;
     private InputAction Abutton;
 
@@ -21,6 +36,7 @@ public class APressedDelay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!Abutton.IsPressed())
         {
             AhasBeenPressed = false;
@@ -28,25 +44,28 @@ public class APressedDelay : MonoBehaviour
             {
                 StartCoroutine(ADelay());
             }
-        }else if (Abutton.IsPressed())
+        }
+        else
         {
             AhasBeenReleased = false;
         }
 
 
     }
-
+    
+    // Allow to turn AReleasable to false after a certain releaseTime
     IEnumerator ADelay()
     {
         AReleasable = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(releaseTime);
         AhasBeenReleased = true;
         AReleasable = false;
     }
 
-    
 
-    public bool isApressed()
+
+    // Check if A is press
+    public bool isApress()
     {
         if(!AhasBeenPressed)
         {
@@ -57,7 +76,8 @@ public class APressedDelay : MonoBehaviour
         return false;
     }
 
-    public bool isAreleased()
+    // Check if A is release
+    public bool isArelease()
     {
         if (!AhasBeenReleased)
         {
@@ -71,12 +91,13 @@ public class APressedDelay : MonoBehaviour
         return false;
     }
 
-    public bool canAbePressed()
+    // Debug method to check if A can be press
+    public bool canAbePress()
     {
         return !AhasBeenPressed;
     }
-
-    public bool canAbeReleased()
+    // Debug method to check if A can be release
+    public bool canAbeRelease()
     {
         return AReleasable;
     }

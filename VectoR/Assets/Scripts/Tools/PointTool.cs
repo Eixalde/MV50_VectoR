@@ -4,23 +4,35 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
+/*
+ * Class allowing to create points
+ */
 public class PointTool : MonoBehaviour
 {
     // Point prefab to instanciate
     public GameObject _3DPoint;
 
-    private bool placingPoint = false;
+    // Boolean indication the tool is activated
+    private bool placingPoint;
 
-    // Temporary coordinate system
-    public GameObject tempCoordinateSystem;
+    // Coordinate system used to create points
+    public GameObject coordinateSystem;
+
     // Temporary point position
     private Vector3 tempPosition;
 
-    public InputActionAsset inputActions;
-
+    // A button specific Inputs
     private APressedDelay aPressed;
 
+    // ToogGestion script
     private ToolGestion tg;
+
+    // RightHandController
+    private GameObject rightHandController;
+
+    // Selection manager
+    private GameObject selectionManager;
+
 
 
     // Start is called before the first frame update
@@ -28,28 +40,31 @@ public class PointTool : MonoBehaviour
     {
         tg = GetComponent<ToolGestion>();
         aPressed = GetComponent<APressedDelay>();
+        rightHandController = GameObject.Find("RightHand Controller");
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     // Update is called once per frame
     void Update()
     {
-        InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
-
+        // Creation of a point
         if (placingPoint)
         {
-            if (aPressed.isApressed())
+            if (aPressed.isApress())
             {
-                // Getting right hand position
-                tempPosition = GameObject.Find("RightHand Controller").transform.position;
-                placingPoint = false;
-                createPoint(tempCoordinateSystem, tempPosition);
-
+                if(rightHandController)
+                {
+                    // Getting right hand position
+                    tempPosition = rightHandController.transform.position;
+                    deselectPointTool();
+                    createPointFromWorldPoint(coordinateSystem, tempPosition);
+                }
             }
         }
     }
 
-    // Create Point based on coordinates and a coordinate system
-    public void createPoint(GameObject coordinateSystem, Vector3 position)
+    // Create Point based on World coordinates and a coordinate system
+    public void createPointFromWorldPoint(GameObject coordinateSystem, Vector3 position)
     {
         Transform transform = new GameObject().transform;
         GameObject point = Instantiate(_3DPoint, transform.position, transform.rotation);
@@ -73,22 +88,25 @@ public class PointTool : MonoBehaviour
 
     }
 
-    // Create a point withour coordinates
+    // Create a point without coordinates
     public void createPointFromNothing(GameObject coordinateSystem)
     {
-        tempCoordinateSystem = coordinateSystem;
+        this.coordinateSystem = coordinateSystem;
         placingPoint = true;
     }
 
+    // Method called when clicking on Point Tool
     public void pointTool()
     {
         if (tg)
         {
             tg.deselectAllTools();
         }
-        createPointFromNothing(tempCoordinateSystem);
+
+        createPointFromNothing(coordinateSystem);
     }
 
+    // Turn all boolean involving point creation to false
     public void deselectPointTool()
     {
         placingPoint = false;

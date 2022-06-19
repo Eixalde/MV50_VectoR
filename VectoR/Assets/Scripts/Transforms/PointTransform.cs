@@ -2,15 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Change the tranform parameters in depends of the Point attributes
+ */
 public class PointTransform : MonoBehaviour
 {
+    // Position of the point using coordinateSystem
     public Vector3 position;
+    // Coordinate system used for positioning the vector
     public GameObject coordinateSystem;
+
+    // Selection manager
+    private GameObject selectionManager;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     // Update is called once per frame
@@ -20,6 +28,7 @@ public class PointTransform : MonoBehaviour
         setTranformFromPoint();
     }
 
+    // Select the object 
     public void Select(bool select)
     {
         GetComponent<Outline>().enabled = select;
@@ -32,6 +41,7 @@ public class PointTransform : MonoBehaviour
         position = newPosition - coordinateSystem.transform.position;
     }
 
+    // Place the Point Object position using position and coordinate system
     private void setTranformFromPoint()
     {
         if (coordinateSystem)
@@ -40,13 +50,14 @@ public class PointTransform : MonoBehaviour
         }
     }
 
+    // Check if the point is still selected
     private void CheckSelection()
     {
-        GameObject selectionManager = GameObject.Find("SelectionManager");
-        if (selectionManager == null)
-            return;
+        if (selectionManager)
+        {
+            if (selectionManager.GetComponent<ObjectSelect>()?.getSelectedObject() != gameObject)
+                Select(false);
+        }
 
-        if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
-            Select(false);
     }
 }

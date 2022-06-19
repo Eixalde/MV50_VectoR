@@ -2,19 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Keep in memory the last gameobject selected
+/*
+ * Keep in memory the last gameobject selected
+ */
 public class ObjectSelect : MonoBehaviour
 {
+    // Current selected object
     public GameObject currentObjectSelected;
-
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
     public void select(GameObject lastObjectSlected)
     {

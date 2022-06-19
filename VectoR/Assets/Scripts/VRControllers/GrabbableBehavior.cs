@@ -7,55 +7,56 @@ using UnityEngine.InputSystem;
 public enum GrabType { None, Free, Snap };
 
 [RequireComponent(typeof(Rigidbody))]
+/*
+ * Class managing interaction between user inputs and the other scripts
+ */
 public class GrabbableBehavior : MonoBehaviour
 {
-    private Rigidbody rigidbody;
-    private GameObject grabber;
-    private bool wasKinematic;
     private bool isHeld = false;
     private bool hover;
 
     public GrabType grabType = GrabType.Free;
     public TextMesh positions;
 
-    public GameObject _coordSystem = null;
+    // Coordinate system of the object
+    public GameObject _coordSystem;
+    // 
     public InputActionAsset inputActions;
 
+    // Selection manager
+    private GameObject selectionManager;
+    // Tool Manager
+    private GameObject toolManager;
+
+    InputAction Abutton;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        wasKinematic = rigidbody.isKinematic;
+        selectionManager = GameObject.Find("SelectionManager");
+        toolManager = GameObject.Find("ToolManager");
+        Abutton = inputActions?.FindActionMap("XRI RightHand")?.FindAction("A_Button");
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("hover" + hover);
         // Using tools
-        GameObject selectionManager = GameObject.Find("SelectionManager");
-        GameObject toolManager = GameObject.Find("ToolManager");
         ObjectSelect os = selectionManager?.GetComponent<ObjectSelect>();
         
         if (toolManager)
         {
-
             VectorTool vt = toolManager.GetComponent<VectorTool>();
             APressedDelay aPressed = toolManager.GetComponent<APressedDelay>();
-            Debug.Log("tool manager + ceat vect ? : " + vt.isCreatingVector());
             ProductTools pts = toolManager.GetComponent<ProductTools>();
-            PlanTool pt = toolManager.GetComponent<PlanTool>();
-            // Vector Tool
+            PlaneTool pt = toolManager.GetComponent<PlaneTool>();
 
+            // Vector Tool
             if (vt.isCreatingVector())
             {
-                Debug.Log("try creat vect");
                 GameObject selectedPoint = vt.getSelectedPoint();
                 if (_mainObject.GetComponent<PointTransform>() != null && selectedPoint != null && gameObject != selectedPoint)
                 {
-                    Debug.Log("try creat vect");
-
                     PointTransform pt1 = selectedPoint.GetComponent<PointTransform>();
                     if(hover)
                     {
@@ -68,25 +69,22 @@ public class GrabbableBehavior : MonoBehaviour
                             }
                         }
                     }
-                    else if (aPressed.isAreleased())
+                    else if (aPressed.isArelease())
                     {
-                        vt.createFromNothing(vt.tempCoorDystem);
+                        vt.createFromNothing(vt.coordinateSystem);
                     }
                 }
             }
             // Dot Product
             else if (pts.isUsingDot())
             {
-                Debug.Log("try dot");
                 GameObject selectedVector = pts.getSelectedVector();
                 if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
                 {
                     VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
                     if (hover)
                     {
-                        // NORMALEMENT c'est changé
                         VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
-                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
                         {
                             pts.dotProductFromVectors(vt1.gameObject, vt2.gameObject);
@@ -98,16 +96,13 @@ public class GrabbableBehavior : MonoBehaviour
             // Cross product
             else if (pts.isUsingCross())
             {
-                Debug.Log("try cross");
                 GameObject selectedVector = pts.getSelectedVector();
                 if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
                 {
                     VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
                     if(hover)
                     {
-                        // CHANGED
                         VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
-                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
                         {
                             pts.crossProductFromVector(vt1.gameObject, vt2.gameObject);
@@ -119,34 +114,25 @@ public class GrabbableBehavior : MonoBehaviour
             // Plan tool
             else if (pt.isCreatingPlane())
             {
-                Debug.Log("1");
                 GameObject selectedVector = pt.getSelectedVector();
 
                 if (_mainObject.GetComponent<VectorTransform>() != null && selectedVector != null && gameObject != selectedVector)
                 {
-                    Debug.Log("2 can release A ? " + aPressed.canAbeReleased());
                     VectorTransform vt1 = selectedVector.GetComponent<VectorTransform>();
                     if (hover)
                     {
-                        // CHANGED
                         VectorTransform vt2 = os.getSelectedObject()?.GetComponent<VectorTransform>();
-                        Debug.Log("vt1 : " + vt1 + " vt2 : " + vt2);
                         if (vt1 != null && vt2 != null)
                         {
-                            Debug.Log("3");
                             pt.createPlanWithTwoCoordinateVector(vt1.getVector(), vt2.getVector(), vt1.positionP1, vt1.coordinateSystem);
                         }
                     }
-                    else if (aPressed.isAreleased())
+                    else if (aPressed.isArelease())
                     {
-                        Debug.Log("4");
                         pt.createPlanWith3DVector(selectedVector);
                     }
-
-                }
-                
+                }           
             }
-
         }
 
         if (isHeld)
@@ -154,32 +140,26 @@ public class GrabbableBehavior : MonoBehaviour
             printPositions();
             OnGrab();
         }
-
-
-
-
     }
  
-    public void JustSelected()
+    // Method called when a object is hovered
+    public void HoverEnter()
     {
-        
-        //Debug.Log("Name : "+gameObject.name);
-        //Debug.Log("Appuie sur A");
-        InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
 
         if (Abutton.IsPressed())
         {
             hover = true;
-            //Debug.Log("Name : " + gameObject.name);
             OnSelected();
             printPositions();
         }
     }
 
+    // Method called when a object is exited
     public void HoverExited()
     {
         hover = false;
     }
+
 
     public void isHeldChange()
     {
@@ -187,6 +167,8 @@ public class GrabbableBehavior : MonoBehaviour
         if (isHeld)
             OnSelected();
     }
+
+
     private void printPositions()
     {
         Vector3 relativePosition = transform.position;
@@ -195,6 +177,7 @@ public class GrabbableBehavior : MonoBehaviour
         if(positions)
             positions.text = name + "\nX = " + relativePosition.x + "\nY = " + relativePosition.y + "\nZ = " + relativePosition.z;
     }
+
     public void addXPosition()
     {
         transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z);
@@ -229,11 +212,9 @@ public class GrabbableBehavior : MonoBehaviour
     // Main object (this, or parent) who manage selection and movement
     public GameObject _mainObject = null;
 
+    // Called when the object is selected
     public void OnSelected()
     {
-            // Mouse clicked detection
-            GameObject selectionManager = GameObject.Find("SelectionManager");
-            Debug.Log("main pbject : " + _mainObject);
             if (_mainObject.GetComponent<PointTransform>())
             {
                 _mainObject.GetComponent<PointTransform>().Select(true);
@@ -246,9 +227,6 @@ public class GrabbableBehavior : MonoBehaviour
             // Select a 3DVector object
             if (_mainObject.GetComponent<VectorTransform>() != null)
             {
-                //Debug.Log("CALL FUNCTION SELECT POINT");
-                Debug.Log("Object selected : " + gameObject.transform.parent?.gameObject.name);
-
                 _mainObject.GetComponent<VectorTransform>().Select(gameObject);
 
                 if (selectionManager != null)
@@ -286,7 +264,6 @@ public class GrabbableBehavior : MonoBehaviour
 
     public void OnGrab()
     {
-        //Debug.Log(" CURRENT GRAB OBJECT : " + gameObject.name + "\n OBJECT TRANSFORM: " + gameObject.transform.position);
         Vector3 position = GameObject.Find("RightHand Controller").transform.position;
 
         // Set position of a 3DVector object
@@ -313,7 +290,5 @@ public class GrabbableBehavior : MonoBehaviour
         {
             transform.position = position;
         }
-        
-
     }
 }

@@ -3,21 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-public class ChangeScene : MonoBehaviour
+/*
+ * Class managing scene changes
+ */
+public class SceneChange : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnQuitScene()
     {
         StartCoroutine(loadSceneTransition());
@@ -32,6 +22,6 @@ public class ChangeScene : MonoBehaviour
     private IEnumerator loadSceneTransition()
     {
         yield return new WaitForSeconds(0);
-        SceneManager.LoadScene("Classroom");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Classroom");
     }
 }

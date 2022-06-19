@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Change the tranform parameters in depends of the Vector attributes
+ */
 public class VectorTransform : MonoBehaviour
 {
-    // Position of the fist point
+    // Position of the fist point using coordinateSystem
     public Vector3 positionP1;
-    // Position of the second point
+    // Position of the second point using coordinateSystem
     public Vector3 positionP2;
+    // Coordinate system used for positioning the vector
+    public GameObject coordinateSystem;
 
     // Model of the axis of the vector 
     public GameObject axis;
@@ -15,44 +20,38 @@ public class VectorTransform : MonoBehaviour
     // Model of the arrowHead of the vector 
     public GameObject arrowHead;
 
-    public GameObject coordinateSystem;
-
-    // Information to use to position the vector
-    // -> true : uses the position of the object in the scene
-    // -> false : uses the positions of the points (P1 & P2)
-    public bool useWorldPosition;
-
+    // List of the movable points of the vector
     public List<GameObject> _movablePoints;
 
+    // Material of the object
     public Material pointMaterial;
     public Material selectedPointMaterial;
 
     // Vector of the game object's position
     private Vector3 _vectorDirection;
 
+    // ID of the selected object of the vector
     private int selectedID = -1;
 
-    // Start is called before the first frame update
-    void Start()
+    // Selection manager
+    private GameObject selectionManager;
+
+
+    private void Start()
     {
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Update vector position/orientation
-        if (!useWorldPosition)
-        {
             CheckSelection();
             setTransformFromPoints();
-            //Debug.Log("Vector P1 pos : " + positionP1);
-        }
     }
 
     // Select a part of the object and outline it
     public void Select(GameObject objectSelected)
     {
-        //Debug.Log("FUNCTION CALLED");
         if (objectSelected == null)
         {
             GetComponent<Outline>().enabled = false;
@@ -135,12 +134,13 @@ public class VectorTransform : MonoBehaviour
 
 
     // Place, rotates and changes the length of the vector
-    // using the points P1 and P2 coordinates
+    // using the points P1 and P2 coordinates and the coordinate system
     private void setTransformFromPoints()
     {
         Vector3 pos1 = positionP1;
         Vector3 pos2 = positionP2;
-        if (coordinateSystem != null)
+
+        if (coordinateSystem)
         {
             positionP1 += coordinateSystem.transform.position;
             positionP2 += coordinateSystem.transform.position;
@@ -161,7 +161,7 @@ public class VectorTransform : MonoBehaviour
         P1.transform.position = positionP1;
         P2.transform.position = positionP2;
         P3.transform.position = middlePoint;
-        // Offset of 1 meter on y coordinate in prefab
+
         arrowHead.transform.position = P2.transform.position;
 
         // Set ROTATION 
@@ -192,6 +192,7 @@ public class VectorTransform : MonoBehaviour
         positionP2 = pos2;
     }
 
+    // Show movable points of the vector
     private void showPoints(bool show)
     {
         foreach (GameObject point in _movablePoints)
@@ -200,6 +201,7 @@ public class VectorTransform : MonoBehaviour
         }
     }
 
+    // Outline the selected point
     private void showSelectedPoint(GameObject pointToSelect)
     {
 
@@ -218,12 +220,9 @@ public class VectorTransform : MonoBehaviour
         }
     }
 
+    // Check if the vector is still selected
     private void CheckSelection()
     {
-        GameObject selectionManager = GameObject.Find("SelectionManager");
-        if (selectionManager == null)
-            return;
-
         if (selectionManager.GetComponent<ObjectSelect>().getSelectedObject() != gameObject)
             Select(null);
     }
@@ -244,6 +243,4 @@ public class VectorTransform : MonoBehaviour
     {
         return positionP2 - positionP1;
     }
-
-
 }

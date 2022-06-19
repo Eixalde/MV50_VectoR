@@ -2,18 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Class allowing to use dot and cross products
+ */
 public class ProductTools : MonoBehaviour
 {
     // Prefab to represent the dot product area
     public GameObject _scalarPlane;
     public GameObject selectedVector;
+
+    // Boolean concerning use of cross and dot products
     private bool usingDotProduct;
     private bool usingCrossProduct;
+
+    // ToogGestion script
     private ToolGestion tg;
+
+    // Selection manager
+    private GameObject selectionManager;
 
     public void Start()
     {
         tg = GetComponent<ToolGestion>();
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     /* Function called when two vectors are selected and the trigger for vectorial product is on. It needs the two gameobjects corresponding
@@ -32,9 +43,8 @@ public class ProductTools : MonoBehaviour
             VectorTool vt = gameObject.GetComponent<VectorTool>();
             if (vt)
             {
-                Debug.Log("vector creation");
                 vt.createVectorFrom2CoordinateSystemPoints(vt1.coordinateSystem, vt1.positionP1, vt1.positionP1 + vectorProductDirection);
-                usingCrossProduct = false;
+                deselectProductTools();
             }
         }
     }
@@ -48,14 +58,12 @@ public class ProductTools : MonoBehaviour
         VectorTransform vt2 = vector_two.GetComponent<VectorTransform>();
         if(vt1 && vt2)
         {
-            Debug.Log("sc prod");
             Vector3 vector1 = vt1.getVector();
             Vector3 vector2 = vt2.getVector();
 
             float scalarProductValue = Vector3.Dot(vector1, vector2);
             float normV1 = Vector3.Magnitude(vector1);
-            // float normV2 = Vector3.Magnitude(vector_two.transform.forward);
-            Debug.Log("sc suite");
+
             /* The normal is important because it is necessary for the placement of the area rectangle. */
             Vector3 vectorProductDirection = Vector3.Cross(vector1, vector2);
             Quaternion normalToArea = Quaternion.FromToRotation(Vector3.up, vectorProductDirection);
@@ -63,29 +71,29 @@ public class ProductTools : MonoBehaviour
             /* Planes are squares by default, scaling is therefore needed to give the rectangle its correct dimensions. The length is the norm
             of the first vector and the height is the norm of the second vector times the angle between both angles. */
             Vector3 areaScale = new Vector3(normV1, 0.001f, scalarProductValue / normV1);
-            Debug.Log("sc fin");
+
             // instanciate in world
             GameObject area = Instantiate(_scalarPlane, vt1.positionP1 + vt1.coordinateSystem.transform.position, normalToArea);
             area.transform.localScale = areaScale;
+
             PlaneLocation pl = area.GetComponentInChildren<PlaneLocation>();
             if (pl)
             {
                 pl._vectorLocation = PlaneLocation.Location.TopR;
             }
-            usingDotProduct = false;
+            deselectProductTools();
         }
-     
-
-
     }
 
+    // Method called when clicking on dot Product Tool
+    // Manage to use or not the tool depending on current selected object
     public void dotProduct()
     {
         if (tg)
         {
             tg.deselectAllTools();
         }
-        GameObject selectionManager = GameObject.Find("SelectionManager");
+
         if (selectionManager)
         {
             GameObject selectedobject = selectionManager.GetComponent<ObjectSelect>()?.getSelectedObject();
@@ -98,6 +106,8 @@ public class ProductTools : MonoBehaviour
         }
     }
 
+    // Method called when clicking on dot Product Tool
+    // Manage to use or not the tool depending on current selected object
     public void crossProduct()
     {
         if (tg)
@@ -133,6 +143,7 @@ public class ProductTools : MonoBehaviour
         return usingCrossProduct;
     }
 
+    // Turn all boolean concerning cross and dot product
     public void deselectProductTools()
     {
         usingCrossProduct = false;

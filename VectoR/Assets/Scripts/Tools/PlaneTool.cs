@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlanTool : MonoBehaviour
+/*
+ * Class allowing to create planes
+ */
+public class PlaneTool : MonoBehaviour
 {
-    // Prefab to instanciate
+    // Plane prefab to instanciate
     public GameObject _3DPlan;
 
-    // Boolean concerning le pacement of the normal vector points
+    private bool creatingPlane;
+
+    // Boolean concerning the placement of the normal vector points
     private bool placingP1;
     private bool placingP2;
 
@@ -16,16 +21,23 @@ public class PlanTool : MonoBehaviour
     private Vector3 tempP1;
     private Vector3 tempP2;
 
-    // Temporary Coordinate System
-    public GameObject tempCoordinateSystem;
+    // Coordinate system used to create plane
+    public GameObject coordinateSystem;
 
+    // First Vector selected when creating a Pane based on Vector(s)
     private GameObject selectedVector;
-    private bool creatingPlane;
-    public InputActionAsset inputActions;
 
+    // A button specific Inputs
     private APressedDelay aPressed;
+
+    // ToogGestion script
     private ToolGestion tg;
 
+    // RightHandController
+    private GameObject rightHandController;
+
+    // Selection manager
+    private GameObject selectionManager;
 
 
     // Start is called before the first frame update
@@ -33,34 +45,39 @@ public class PlanTool : MonoBehaviour
     {
         tg = GetComponent<ToolGestion>();
         aPressed = GetComponent<APressedDelay>();
+        rightHandController = GameObject.Find("RightHand Controller");
+        selectionManager = GameObject.Find("SelectionManager");
     }
 
     // Update is called once per frame
     void Update()
     {
-        InputAction Abutton = inputActions.FindActionMap("XRI RightHand").FindAction("A_Button");
-
         // Creation of a Plane
         if (placingP1)
         {
-            if (aPressed.isApressed())
+            if (aPressed.isApress())
             {
-                // Using right hand coordinates
-                tempP1 = GameObject.Find("RightHand Controller").transform.position;
-                placingP1 = false;
-                placingP2 = true;
-
+                if(rightHandController)
+                {
+                    // Using right hand coordinates
+                    tempP1 = rightHandController.transform.position;
+                    placingP1 = false;
+                    placingP2 = true;
+                }
             }
         }
         else if (placingP2)
         {
-            if (aPressed.isApressed())
+            if (aPressed.isApress())
             {
-                // Using right hand coordinates
-                tempP2 = GameObject.Find("RightHand Controller").transform.position; ;
-                placingP2 = false;
-                Vector3 temp = tempP2 - tempP1;
-                createPlanWithWorldVector(temp, tempP1, tempCoordinateSystem);
+                if (rightHandController)
+                {
+                    // Using right hand coordinates
+                    tempP2 = rightHandController.transform.position; ;
+                    placingP2 = false;
+                    Vector3 temp = tempP2 - tempP1;
+                    createPlanWithWorldVector(temp, tempP1, coordinateSystem);
+                }
             }
         }
     }
@@ -71,8 +88,7 @@ public class PlanTool : MonoBehaviour
     public void createPlanFromNothing(GameObject coordinate)
     {
         placingP1 = true;
-        tempCoordinateSystem = coordinate;
-        creatingPlane = false;
+        coordinateSystem = coordinate;
     }
 
     /*
@@ -80,7 +96,6 @@ public class PlanTool : MonoBehaviour
      */
     public void createPlanWith3DVector(GameObject _3Dvector)
     {
-        //Debug.Log("creating 1 vector plan");
         Transform transform = new GameObject().transform;
         GameObject plan = Instantiate(_3DPlan, transform.position, transform.rotation);
         PlanTransform pt = plan.GetComponent<PlanTransform>();
@@ -92,14 +107,13 @@ public class PlanTool : MonoBehaviour
 
             vtPlan.positionP1 = vtVect.positionP1;
             vtPlan.positionP2 = vtVect.positionP2;
-            vtPlan.coordinateSystem = tempCoordinateSystem;
+            vtPlan.coordinateSystem = coordinateSystem;
             pt._vector3D.SetActive(true);
 
             GrabbableBehavior gbPlan = plan.GetComponent<GrabbableBehavior>();
             if (gbPlan)
             {
-                gbPlan._coordSystem = tempCoordinateSystem;
-                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                gbPlan._coordSystem = coordinateSystem;
                 TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                 gbPlan.positions = positionText;
 
@@ -107,18 +121,20 @@ public class PlanTool : MonoBehaviour
             GrabbableBehavior gbVect = vtPlan.GetComponent<GrabbableBehavior>();
             if (gbVect)
             {
-                gbVect._coordSystem = tempCoordinateSystem;
-                Debug.Log("text pos ? " + GameObject.Find("Positions"));
+                gbVect._coordSystem = coordinateSystem;
                 TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                 gbVect.positions = positionText;
             }
         }
-        ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
-        os.select(plan);
-
-        creatingPlane = false;
+        if(selectionManager)
+        {
+            ObjectSelect os = selectionManager.GetComponent<ObjectSelect>();
+            os.select(plan);
+        }
+        deselectPlaneTool();
     }
 
+    // Create a Plan with two vectors a coordinate system and World point 
     public void createPlanWithWorldVector(Vector3 vector, Vector3 point, GameObject coordinateSystem)
     {
         Vector3 coordPoint = point - coordinateSystem.transform.position;
@@ -126,33 +142,30 @@ public class PlanTool : MonoBehaviour
     }
 
     /* 
-     * Create a plan using a Vector, a Point and a Coordinate System
+     * Create a plan using a Vector, a Coordinate systeme Point and a Coordinate System
      */
     public void createPlanWithCoordinateVector(Vector3 vector, Vector3 point, GameObject coordinateSystem)
     {
-        //Debug.Log("creating 1 vector plan");
         Transform transform = new GameObject().transform;
         GameObject plan = Instantiate(_3DPlan, transform.position, transform.rotation);
         PlanTransform pt = plan.GetComponent<PlanTransform>();
         if(pt)
         {
-            
             VectorTransform vt = pt._vector3D.GetComponent<VectorTransform>();
             if (vt)
             {
-                // Setting point from world pos to coord pos
                 vt.coordinateSystem = coordinateSystem;
                 vt.positionP1 = point;
                 vt.positionP2 = point + vector;
+                pt._vector3D.SetActive(true);
 
                 GrabbableBehavior gb = plan.GetComponent<GrabbableBehavior>();
                 if (gb)
                 {
                     gb._coordSystem = coordinateSystem;
-                    Debug.Log("text pos ? " + GameObject.Find("Positions"));
                     TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                     gb.positions = positionText;
-                    Debug.Log("for each ? " + pt.gameObject.GetComponentsInChildren<GrabbableBehavior>().Length);
+
                     foreach (GrabbableBehavior grabbable in pt.gameObject.GetComponentsInChildren<GrabbableBehavior>())
                     {
                         grabbable.positions = positionText;
@@ -162,39 +175,45 @@ public class PlanTool : MonoBehaviour
                 if (gbVect)
                 {
                     gbVect._coordSystem = coordinateSystem;
-                    Debug.Log("text pos ? " + GameObject.Find("Positions"));
                     TextMesh positionText = GameObject.Find("Positions")?.GetComponent<TextMesh>();
                     gbVect.positions = positionText;
                 }
             }      
         }
-        ObjectSelect os = GameObject.Find("SelectionManager").GetComponent<ObjectSelect>();
-        os.select(plan);
-        creatingPlane = false;
+
+        if(selectionManager)
+        {
+            ObjectSelect os = selectionManager.GetComponent<ObjectSelect>();
+            os.select(plan);
+        }
+        deselectPlaneTool();
     }
+
     /*
-     * Create a plan using two non colinear vectors, a Point and a Coordonate System
+     * Create a plan using two non colinear vectors, a Coordinate system Point and a Coordinate System
      */
     public void createPlanWithTwoCoordinateVector(Vector3 vector1, Vector3 vector2, Vector3 point, GameObject coordinateSystem)
     {
         //Debug.Log("creating 2 vector plan");
         Vector3 vector = Vector3.Cross(vector1, vector2);
         createPlanWithCoordinateVector(vector, point, coordinateSystem);
-        creatingPlane = false;
+        deselectPlaneTool();
     }
 
-    public void planTool()
+
+    // Method called when clicking on Plane Tool
+    // Manage to use the right creation process depending on current selected object
+    public void planeTool()
     {
         if (tg)
         {
             tg.deselectAllTools();
         }
-        GameObject selectionManager = GameObject.Find("SelectionManager");
+
         if (selectionManager)
         {
             GameObject selectedObject = selectionManager.GetComponent<ObjectSelect>()?.getSelectedObject();
-            Debug.Log("selected : " + selectedObject);
-            VectorTransform vt = selectedObject.GetComponent<VectorTransform>();
+            VectorTransform vt = selectedObject?.GetComponent<VectorTransform>();
             if (vt)
             {
                 selectedVector = selectedObject;
@@ -202,7 +221,7 @@ public class PlanTool : MonoBehaviour
             }
             else
             {
-                createPlanFromNothing(tempCoordinateSystem);
+                createPlanFromNothing(coordinateSystem);
             }
         }
     }
@@ -217,10 +236,11 @@ public class PlanTool : MonoBehaviour
         return creatingPlane;
     }
 
+    // Turn all boolean concerning plane creation to false
     public void deselectPlaneTool()
     {
         creatingPlane = false;
         placingP1 = false;
         placingP2 = false;
-}
+    }
 }

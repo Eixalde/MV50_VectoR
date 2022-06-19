@@ -2,28 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Class managing tool selection
+ */
 public class ToolGestion : MonoBehaviour
 {
+    // Point tool
     PointTool pointTool;
+    // Vector tool
     VectorTool vectorTool;
+    // Product tools
     ProductTools productTools;
-    PlanTool planTool;
+    // Plane tool
+    PlaneTool planTool;
+
+
     // Start is called before the first frame update
     void Start()
     {
         pointTool = GetComponent<PointTool>();
         vectorTool = GetComponent<VectorTool>();
         productTools = GetComponent<ProductTools>();
-        planTool = GetComponent<PlanTool>();
+        planTool = GetComponent<PlaneTool>();
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Desselect all tools
     public void deselectAllTools()
     {
         pointTool.deselectPointTool();
