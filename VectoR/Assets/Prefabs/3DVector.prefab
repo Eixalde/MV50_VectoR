@@ -376,7 +376,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1241660464958814319}
         m_TargetAssemblyTypeName: GrabbableBehavior, Assembly-CSharp
-        m_MethodName: JustSelected
+        m_MethodName: HoverEnter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

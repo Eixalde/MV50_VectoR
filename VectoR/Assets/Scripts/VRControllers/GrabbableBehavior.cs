@@ -36,6 +36,7 @@ public class GrabbableBehavior : MonoBehaviour
         selectionManager = GameObject.Find("SelectionManager");
         toolManager = GameObject.Find("ToolManager");
         Abutton = inputActions?.FindActionMap("XRI RightHand")?.FindAction("A_Button");
+        Debug.Log("Abutton" + Abutton);
     }
 
     // Update is called once per frame

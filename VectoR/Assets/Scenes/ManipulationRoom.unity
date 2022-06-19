@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16412668, g: 0.011490691, b: 0.04506165, a: 1}
+  m_IndirectSpecularColor: {r: 0.34542173, g: 0.00918426, b: 0.040871754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1443,7 +1443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1072743452107871371, guid: 4587b61e821a7e4458510e1528019faa, type: 3}
       propertyPath: m_HoverEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: JustSelected
+      value: HoverEnter
       objectReference: {fileID: 0}
     - target: {fileID: 1072743452107871371, guid: 4587b61e821a7e4458510e1528019faa, type: 3}
       propertyPath: m_FirstHoverEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState

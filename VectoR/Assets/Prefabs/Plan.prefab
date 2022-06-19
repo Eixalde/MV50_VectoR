@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98295b74264a62d41bbf6e49dcc64580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vectorLocation: 0
   _plan: {fileID: 6895821811391384762}
   _vector3D: {fileID: 8203676933593408027}
 --- !u!65 &6859503072621878289
@@ -249,7 +248,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5182634401183365534}
         m_TargetAssemblyTypeName: GrabbableBehavior, Assembly-CSharp
-        m_MethodName: JustSelected
+        m_MethodName: HoverEnter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
